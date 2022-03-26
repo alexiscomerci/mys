@@ -2,7 +2,7 @@ import "./App.css";
 import "katex/dist/katex.min.css";
 
 import { Container, Grid, InputAdornment, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
 import EquationEditor from "equation-editor-react";
@@ -15,6 +15,7 @@ function App() {
   const [a, setA] = useState(0);
   const [b, setB] = useState(10);
   const [N, setN] = useState(10);
+  const eqInputRef = useRef(null);
 
   var xValues = [];
   var yValues = [];
@@ -99,13 +100,17 @@ function App() {
           />
         </Grid> */}
         <Grid item xs={12} md={6}>
-          <div id="equationContainer">
+          <div
+            id="equationContainer"
+            onClick={() => eqInputRef.current.element.current.children[0].children[0].focus()}
+          >
             <span id="fx">f(x) = </span>
             <EquationEditor
               value={equation}
               onChange={setEquation}
               autoCommands="pi theta sqrt sum prod alpha beta gamma rho"
               autoOperatorNames="sin cos tan"
+              ref={eqInputRef}
             />
           </div>
         </Grid>
