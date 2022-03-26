@@ -22,7 +22,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "heroku-postbuild": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --prod && npm install -g http-server-spa",
     "start": "react-scripts --max_old_space_size=4096 start",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts test",
