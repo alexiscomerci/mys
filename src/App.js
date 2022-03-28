@@ -2,12 +2,13 @@ import "./App.css";
 import "katex/dist/katex.min.css";
 
 import { Container, Grid, InputAdornment, TextField } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
 import EquationEditor from "equation-editor-react";
 import Mexp from "math-expression-evaluator";
 import Plot from "react-plotly.js";
+import helper from "./helper";
 
 function App() {
   const [equation, setEquation] = useState("x");
@@ -15,90 +16,27 @@ function App() {
   const [a, setA] = useState(0);
   const [b, setB] = useState(10);
   const [N, setN] = useState(10);
+  const [integralIntervals, setIntegralIntervals] = useState(1000);
+  // const [integralValues, setIntegralValues] = useState({ x: [], y: [] });
+  const [integral, setIntegral] = useState({ x: [], y: [], result: 0 });
+  // const [integralResult, setIntegralResult] = useState(0);
   const eqInputRef = useRef(null);
 
-  var xValues = [];
-  var yValues = [];
-  console.log(latexToNormal());
-  let expNormal = latexToNormal();
-  for (var x = +a; x <= +b; x += 0.1) {
-    x = +x.toFixed(1);
-    xValues.push(x);
+  useEffect(() => {
     try {
-      // console.log(
-      //   x,
-      //   latexToNormal().replaceAll("x", `(${x})`).replaceAll("^", "**"),
-      //   eval(latexToNormal().replaceAll("x", `(${x})`).replaceAll("^", "**")),
-      //   Mexp.eval(latexToNormal().replaceAll("x", `(${x})`))
-      // );
-      // let y = eval(latexToNormal().replaceAll("x", `(${x})`).replaceAll("^", "**"));
-      let y = Mexp.eval(expNormal.replaceAll("x", `(${x})`));
-      yValues.push(y);
+      setIntegral(helper.integral(a, b, equation, integralIntervals));
     } catch (e) {
       console.log(e);
     }
-  }
+  }, [equation, a, b, integralIntervals]);
 
   function latexExp() {
-    return `f(x)=\\int_{${a}}^{${b}} ${equation} \\, dx = ???`.replace(/(\d+\d)/g, "{$1}");
-  }
-
-  function latexToNormal() {
-    let eq = equation
-      .replaceAll("\\left", "(")
-      .replaceAll("\\right", ")")
-      .replaceAll("\\cdot", "*")
-      .replaceAll("\\pi", Math.PI);
-    eq = replaceFracs(eq);
-    return eq;
-  }
-
-  function replaceFracs(str) {
-    let i = str.indexOf("\\frac{");
-    while (i >= 0) {
-      let left = getGroup(str, i + 6);
-      let right = getGroup(str, left.end + 2);
-      // console.log("left", left);
-      // console.log("right", right);
-      // console.log(
-      //   `${str.substring(0, left.start - 6)}(${left.content})/(${right.content})${str.substring(right.end + 1)}`
-      // );
-      str = `${str.substring(0, left.start - 6)}(${left.content})/(${right.content})${str.substring(right.end + 1)}`;
-      i = str.indexOf("\\frac{");
-    }
-    return str;
-  }
-
-  function getGroup(str, start) {
-    let count = 1;
-    let i = start;
-    for (; count > 0 && i < str.length; i++) {
-      const char = str[i];
-      if (char === "{") count++;
-      else if (char === "}") count--;
-      // console.log(char + " = " + count);
-    }
-    return {
-      start,
-      end: i - 1,
-      content: str.substring(start, i - 1),
-    };
+    return `f(x)=\\int_{${a}}^{${b}} ${equation} \\, dx = ${integral.result.toFixed(2)}`.replace(/(\d+\d)/g, "{$1}");
   }
 
   return (
     <Container>
       <Grid container spacing={2}>
-        {/* <Grid item xs={12} md={6}>
-          <TextField
-            variant="outlined"
-            value={exp}
-            onChange={(e) => setExp(e.target.value)}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">f(x)=</InputAdornment>,
-            }}
-            fullWidth
-          />
-        </Grid> */}
         <Grid item xs={12} md={6}>
           <div
             id="equationContainer"
@@ -109,18 +47,12 @@ function App() {
               value={equation}
               onChange={setEquation}
               autoCommands="pi theta sqrt sum prod alpha beta gamma rho"
-              autoOperatorNames="sin cos tan"
+              autoOperatorNames="sin cos tan arcsin arccos arctan"
               ref={eqInputRef}
             />
           </div>
         </Grid>
         <Grid item md={6}></Grid>
-        {/* <Grid item xs={12} md={6}>
-          {equation}
-        </Grid>
-        <Grid item xs={12} md={6}>
-          {latexToNormal()}
-        </Grid> */}
         <Grid item xs={4} md={2}>
           <TextField
             variant="outlined"
@@ -159,7 +91,7 @@ function App() {
         </Grid>
         <Grid item xs={12}>
           <Plot
-            data={[{ x: xValues, y: yValues, mode: "lines" }]}
+            data={[{ x: integral.x, y: integral.y, mode: "lines" }]}
             layout={{
               width: "100%",
               height: "100%",
