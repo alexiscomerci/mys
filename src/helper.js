@@ -38,7 +38,7 @@ export const helper = {
       //     Mexp.eval(ecuation.replaceAll("x", `(${x.toFixed(5)})`))
       //   );
       let ec = this.prepareEcuation(ecuation, x);
-      console.log(ec);
+      //   console.log(ec);
       return Mexp.eval(ec);
       // return eval(
       //   expNormal
@@ -48,7 +48,7 @@ export const helper = {
       //     .replaceAll("}", "")
       // );
     } catch (e) {
-      //   console.log(e);
+      console.log(e);
     }
   },
 
@@ -62,6 +62,8 @@ export const helper = {
     ec = this.replaceTrigFunc(ec, "\\arcsin");
     ec = this.replaceTrigFunc(ec, "\\arccos");
     ec = this.replaceTrigFunc(ec, "\\arctan");
+    ec = ec.replaceAll("{", "(");
+    ec = ec.replaceAll("}", ")");
     return ec;
   },
 
