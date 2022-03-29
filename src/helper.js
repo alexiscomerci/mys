@@ -3,7 +3,7 @@ import Mexp from "math-expression-evaluator";
 export const helper = {
   integral(min, max, ecuationLatex, num) {
     let ecuation = this.latexToNormal(ecuationLatex);
-    console.log(ecuation);
+    // console.log(ecuation);
     let x = [];
     let y = [];
     let result = 0;
@@ -62,39 +62,41 @@ export const helper = {
     ec = this.replaceTrigFunc(ec, "\\arcsin");
     ec = this.replaceTrigFunc(ec, "\\arccos");
     ec = this.replaceTrigFunc(ec, "\\arctan");
+    ec = this.replaceExtraParenthesis(ec);
     ec = ec.replaceAll("{", "(");
     ec = ec.replaceAll("}", ")");
     return ec;
   },
 
+  //TOOD: Si tiene un número a la izquierda multiplicarlo por la func para que no se rompa (ej 3cos(x))
   replaceTrigFunc(str, func) {
     let i = str.indexOf(func);
     while (i >= 0) {
-      let param = this.getGroup(str, i + func.length, "(", ")");
-      let deg = 0;
+      let param = this.getGroup(str, i + func.length + 1, "(", ")");
+      let res = 0;
       switch (func) {
         case "\\sin":
-          deg = Math.sin(Mexp.eval(param.content));
+          res = Math.sin(Mexp.eval(param.content));
           break;
         case "\\cos":
-          deg = Math.cos(Mexp.eval(param.content));
+          res = Math.cos(Mexp.eval(param.content));
           break;
         case "\\tan":
-          deg = Math.tan(Mexp.eval(param.content));
+          res = Math.tan(Mexp.eval(param.content));
           break;
         case "\\arcsin":
-          deg = Math.asin(Mexp.eval(param.content));
+          res = Math.asin(Mexp.eval(param.content));
           break;
         case "\\arccos":
-          deg = Math.acos(Mexp.eval(param.content));
+          res = Math.acos(Mexp.eval(param.content));
           break;
         case "\\arctan":
-          deg = Math.atan(Mexp.eval(param.content));
+          res = Math.atan(Mexp.eval(param.content));
           break;
         default:
           break;
       }
-      str = `${str.substring(0, param.start - func.length)}${deg}${str.substring(param.end + 1)}`;
+      str = `${str.substring(0, param.start - func.length - 1)}${res}${str.substring(param.end + 1)}`;
       i = str.indexOf(func);
     }
     return str;
@@ -108,6 +110,18 @@ export const helper = {
       str = `${str.substring(0, param.start - 6)}${val}${str.substring(param.end + 1)}`;
       i = str.indexOf("\\sqrt");
     }
+    return str;
+  },
+
+  replaceExtraParenthesis(str) {
+    let prev = "";
+    do {
+      prev = str;
+      str = str
+        .replace(/(\([.0-9]*\))/g, "leftdel$1rightdel")
+        .replaceAll("leftdel(", "")
+        .replaceAll(")rightdel", "");
+    } while (prev !== str);
     return str;
   },
 

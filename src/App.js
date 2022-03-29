@@ -31,7 +31,10 @@ function App() {
   }, [equation, a, b, integralIntervals]);
 
   function latexExp() {
-    return `f(x)=\\int_{${a}}^{${b}} ${equation} \\, dx = ${integral.result.toFixed(2)}`.replace(/(\d+\d)/g, "{$1}");
+    return `f(x)=\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx = ${integral.result.toFixed(2)}`.replace(
+      /(\d+\d)/g,
+      "{$1}"
+    );
   }
 
   return (
@@ -89,6 +92,9 @@ function App() {
         <Grid item xs={12}>
           <BlockMath>{latexExp()}</BlockMath>
         </Grid>
+        {/* <Grid item xs={12}>
+          {equation}
+        </Grid> */}
         <Grid item xs={12}>
           <Plot
             data={[{ x: integral.x, y: integral.y, mode: "lines" }]}
