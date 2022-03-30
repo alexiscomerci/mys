@@ -108,6 +108,7 @@ function App() {
               {
                 x: rectangle.x,
                 y: rectangle.y,
+                width: (b - a) / N,
                 type: "bar",
                 name: "Rectángulo",
               },
