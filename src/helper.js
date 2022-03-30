@@ -1,19 +1,22 @@
 import Mexp from "math-expression-evaluator";
 
 export const helper = {
-  integral(min, max, ecuationLatex, num) {
-    let ecuation = this.latexToNormal(ecuationLatex);
-    // console.log(ecuation);
+  integral(min, max, equationLatex, num) {
+    min = +min;
+    max = +max;
+    num = +num;
+    let equation = this.latexToNormal(equationLatex);
+    console.log(equation);
     let x = [];
     let y = [];
     let result = 0;
     let x1 = min;
-    let y1 = this.func(ecuation, min);
+    let y1 = this.func(equation, min);
     let x2, y2;
     let dx = (max - min) / num;
     for (let i = 0; i < num; i++) {
       x2 = +x1 + dx;
-      y2 = this.func(ecuation, x2.toFixed(5));
+      y2 = this.func(equation, x2.toFixed(5));
       let area = ((y1 + y2) * dx) / 2;
       result += area;
       x1 = x2;
@@ -22,7 +25,34 @@ export const helper = {
       y.push(y2);
     }
 
-    result = +result.toFixed(2);
+    result = +result.toFixed(4);
+
+    return {
+      x,
+      y,
+      result,
+    };
+  },
+
+  areaRectangle(min, max, equationLatex, N) {
+    min = +min;
+    max = +max;
+    N = +N;
+    let equation = this.latexToNormal(equationLatex);
+    let h = (max - min) / N;
+    let x = [];
+    let y = [];
+    let result = 0;
+    for (let i = 0; i < N; i++) {
+      let xLeft = min + i * h;
+      let xRight = xLeft + h;
+      let xMid = (xLeft + xRight) / 2;
+      let res = helper.func(equation, xMid);
+      result += res;
+      x.push(xMid);
+      y.push(res);
+    }
+    result = (h * result).toFixed(4);
 
     return {
       x,
@@ -38,7 +68,7 @@ export const helper = {
       //     Mexp.eval(ecuation.replaceAll("x", `(${x.toFixed(5)})`))
       //   );
       let ec = this.prepareEcuation(ecuation, x);
-      //   console.log(ec);
+      //   console.log(ecuation, ec);
       return Mexp.eval(ec);
       // return eval(
       //   expNormal
@@ -48,7 +78,7 @@ export const helper = {
       //     .replaceAll("}", "")
       // );
     } catch (e) {
-      console.log(e);
+      //   console.log(e);
     }
   },
 
@@ -96,10 +126,7 @@ export const helper = {
         default:
           break;
       }
-      str = `${str.substring(
-        0,
-        param.start - func.length - 1
-      )}${res}${str.substring(param.end + 1)}`;
+      str = `${str.substring(0, param.start - func.length - 1)}${res}${str.substring(param.end + 1)}`;
       i = str.indexOf(func);
     }
     return str;
@@ -110,9 +137,7 @@ export const helper = {
     while (i >= 0) {
       let param = this.getGroup(str, i + 6, "{", "}");
       let val = Math.sqrt(Mexp.eval(param.content));
-      str = `${str.substring(0, param.start - 6)}${val}${str.substring(
-        param.end + 1
-      )}`;
+      str = `${str.substring(0, param.start - 6)}${val}${str.substring(param.end + 1)}`;
       i = str.indexOf("\\sqrt");
     }
     return str;
@@ -145,9 +170,7 @@ export const helper = {
     while (i >= 0) {
       let left = this.getGroup(str, i + 6, "{", "}");
       let right = this.getGroup(str, left.end + 2, "{", "}");
-      str = `${str.substring(0, left.start - 6)}(${left.content})/(${
-        right.content
-      })${str.substring(right.end + 1)}`;
+      str = `${str.substring(0, left.start - 6)}(${left.content})/(${right.content})${str.substring(right.end + 1)}`;
       i = str.indexOf("\\frac{");
     }
     return str;
