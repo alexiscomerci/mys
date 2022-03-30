@@ -96,7 +96,10 @@ export const helper = {
         default:
           break;
       }
-      str = `${str.substring(0, param.start - func.length - 1)}${res}${str.substring(param.end + 1)}`;
+      str = `${str.substring(
+        0,
+        param.start - func.length - 1
+      )}${res}${str.substring(param.end + 1)}`;
       i = str.indexOf(func);
     }
     return str;
@@ -107,7 +110,9 @@ export const helper = {
     while (i >= 0) {
       let param = this.getGroup(str, i + 6, "{", "}");
       let val = Math.sqrt(Mexp.eval(param.content));
-      str = `${str.substring(0, param.start - 6)}${val}${str.substring(param.end + 1)}`;
+      str = `${str.substring(0, param.start - 6)}${val}${str.substring(
+        param.end + 1
+      )}`;
       i = str.indexOf("\\sqrt");
     }
     return str;
@@ -140,7 +145,9 @@ export const helper = {
     while (i >= 0) {
       let left = this.getGroup(str, i + 6, "{", "}");
       let right = this.getGroup(str, left.end + 2, "{", "}");
-      str = `${str.substring(0, left.start - 6)}(${left.content})/(${right.content})${str.substring(right.end + 1)}`;
+      str = `${str.substring(0, left.start - 6)}(${left.content})/(${
+        right.content
+      })${str.substring(right.end + 1)}`;
       i = str.indexOf("\\frac{");
     }
     return str;
