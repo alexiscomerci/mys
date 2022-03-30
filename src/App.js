@@ -30,7 +30,7 @@ function App() {
     } catch (e) {
       console.log(e);
     }
-  }, [equation, a, b, integralIntervals]);
+  }, [equation, a, b, N, integralIntervals]);
 
   function latexExp() {
     return `f(x)=\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx = ${integral.result.toFixed(4)}`.replace(
@@ -104,23 +104,26 @@ function App() {
         <Grid item xs={12}>
           <Plot
             data={[
-              { x: integral.x, y: integral.y, mode: "lines" },
-              // {
-              //   x: rectangle.x,
-              //   y: rectangle.y,
-              //   type: "bar",
-              // },
+              { x: integral.x, y: integral.y, mode: "lines", name: "Exacta" },
+              {
+                x: rectangle.x,
+                y: rectangle.y,
+                type: "bar",
+                name: "Rectángulo",
+              },
             ]}
             layout={{
               width: "100%",
               height: "100%",
               xaxis: {
                 title: "x",
+                zeroline: true,
               },
               yaxis: {
                 scaleanchor: "x",
                 scaleratio: "1",
                 title: "f(x)",
+                zeroline: true,
               },
             }}
           />
