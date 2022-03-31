@@ -52,7 +52,38 @@ export const helper = {
       x.push(xMid);
       y.push(res);
     }
-    result = (h * result).toFixed(4);
+    result = +(h * result).toFixed(4);
+
+    return {
+      x,
+      y,
+      result,
+    };
+  },
+
+  areaTrapezium(min, max, equationLatex, N) {
+    min = +min;
+    max = +max;
+    N = +N;
+    let equation = this.latexToNormal(equationLatex);
+    let h = (max - min) / N;
+    let x = [];
+    let y = [];
+    let result = 0;
+    let f0 = helper.func(equation, min);
+    x.push(min);
+    y.push(f0);
+    for (let i = 1; i < N; i++) {
+      let xLeft = min + i * h;
+      let res = helper.func(equation, xLeft);
+      result += res;
+      x.push(xLeft);
+      y.push(res);
+    }
+    let fN = helper.func(equation, max);
+    x.push(max);
+    y.push(fN);
+    result = +(h * (f0 / 2 + result + fN / 2)).toFixed(4);
 
     return {
       x,
