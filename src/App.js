@@ -6,22 +6,18 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
 import EquationEditor from "equation-editor-react";
-import Mexp from "math-expression-evaluator";
 import Plot from "react-plotly.js";
 import helper from "./helper";
 
 function App() {
   const [equation, setEquation] = useState("");
-  // const [exp, setExp] = useState("x");
   const [a, setA] = useState(0);
   const [b, setB] = useState(1);
   const [N, setN] = useState(2);
-  const [integralIntervals, setIntegralIntervals] = useState(1000);
-  // const [integralValues, setIntegralValues] = useState({ x: [], y: [] });
+  const integralIntervals = 1000;
   const [exact, setExact] = useState({ x: [], y: [], result: 0 });
   const [rectangle, setRectangle] = useState({ x: [], y: [], result: 0 });
   const [trapezium, setTrapezium] = useState({ x: [], y: [], result: 0 });
-  // const [integralResult, setIntegralResult] = useState(0);
   const eqInputRef = useRef(null);
 
   useEffect(() => {
@@ -105,7 +101,7 @@ function App() {
           <Grid item xs={12}>
             <BlockMath>{latexExp()}</BlockMath>
           </Grid>
-          <Grid item xs={12} pt={3}>
+          <Grid item xs={12} pt={3} pb={1}>
             <Typography variant="h5" component="h5">
               Resultados
             </Typography>
@@ -115,7 +111,7 @@ function App() {
               <TextField
                 label="Exacta"
                 variant="outlined"
-                value={exact.result}
+                value={exact.result || 0}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -125,7 +121,7 @@ function App() {
               <TextField
                 label="Rectángulo"
                 variant="outlined"
-                value={rectangle.result}
+                value={rectangle.result || 0}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -135,7 +131,7 @@ function App() {
               <TextField
                 label="Trapecio"
                 variant="outlined"
-                value={trapezium.result}
+                value={trapezium.result || 0}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -143,9 +139,6 @@ function App() {
             </Grid>
           </Grid>
         </Grid>
-        {/* <Grid item xs={12}>
-          {equation}
-        </Grid> */}
         <Grid item xs={12} lg={6}>
           <Plot
             data={[
@@ -175,6 +168,18 @@ function App() {
                 // scaleratio: "1",
                 title: "f(x)",
                 zeroline: true,
+                yanchor: "top",
+              },
+              legend: {
+                orientation: "h",
+                y: 999,
+              },
+              margin: {
+                l: 60,
+                r: 20,
+                b: 40,
+                t: 20,
+                pad: 2,
               },
             }}
             config={{ responsive: true }}
