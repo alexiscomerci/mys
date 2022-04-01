@@ -23,8 +23,8 @@ function App() {
   useEffect(() => {
     try {
       setExact(helper.integral(a, b, equation, integralIntervals));
-      setRectangle(helper.areaRectangle(a, b, equation, N));
-      setTrapezium(helper.areaTrapezium(a, b, equation, N));
+      setRectangle(helper.integralRectangle(a, b, equation, N));
+      setTrapezium(helper.integralTrapezium(a, b, equation, N));
     } catch (e) {
       console.log(e);
     }

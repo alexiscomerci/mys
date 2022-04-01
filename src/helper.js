@@ -34,7 +34,7 @@ export const helper = {
     };
   },
 
-  areaRectangle(min, max, equationLatex, N) {
+  integralRectangle(min, max, equationLatex, N) {
     min = +min;
     max = +max;
     N = +N;
@@ -61,7 +61,7 @@ export const helper = {
     };
   },
 
-  areaTrapezium(min, max, equationLatex, N) {
+  integralTrapezium(min, max, equationLatex, N) {
     min = +min;
     max = +max;
     N = +N;
@@ -74,6 +74,38 @@ export const helper = {
     x.push(min);
     y.push(f0);
     for (let i = 1; i < N; i++) {
+      let xLeft = min + i * h;
+      let res = helper.func(equation, xLeft);
+      result += res;
+      x.push(xLeft);
+      y.push(res);
+    }
+    let fN = helper.func(equation, max);
+    x.push(max);
+    y.push(fN);
+    result = +(h * (f0 / 2 + result + fN / 2)).toFixed(4);
+
+    return {
+      x,
+      y,
+      result,
+    };
+  },
+
+  integralMontecarlo(min, max, equationLatex, N) {
+    min = +min;
+    max = +max;
+    N = +N;
+    let equation = this.latexToNormal(equationLatex);
+    let h = (max - min) / N;
+    let x = [];
+    let y = [];
+    let result = 0;
+    let f0 = helper.func(equation, min);
+    x.push(min);
+    y.push(f0);
+    for (let i = 0; i < N; i++) {
+      let randX = this.randomIntFromInterval(a, b);
       let xLeft = min + i * h;
       let res = helper.func(equation, xLeft);
       result += res;
@@ -220,6 +252,10 @@ export const helper = {
       end: i - 1,
       content: str.substring(start, i - 1),
     };
+  },
+
+  randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   },
 };
 
