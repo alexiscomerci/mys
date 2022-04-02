@@ -98,49 +98,48 @@ export const helper = {
     };
   },
 
-  integralMontecarlo(equationLatex, dots, xMin, xMax, integralExact) {
+  integralMontecarlo(equationLatex, N, xMin, xMax, integralExact) {
     xMin = +xMin;
     xMax = +xMax;
-    dots = +dots;
+    N = +N;
     let yMin = integralExact.yMin - 0.1 * Math.abs(integralExact.yMin);
     let yMax = integralExact.yMax + 0.1 * Math.abs(integralExact.yMax);
+    let H = yMax - yMin;
     let equation = this.latexToNormal(equationLatex);
-    let greenX = [];
-    let blueX = [];
-    let redX = [];
-    let greenY = [];
-    let blueY = [];
-    let redY = [];
-    let y = [];
-    let green = 0;
-    let blue = 0;
-    let red = 0;
-    let result = 0;
-    // console.log("yMin", yMin, "yMax", yMax);
-    for (let i = 0; i < dots; i++) {
+    let green = {
+      x: [],
+      y: [],
+      count: 0,
+    };
+    let blue = JSON.parse(JSON.stringify(green));
+    let red = JSON.parse(JSON.stringify(green));
+    for (let i = 0; i < N; i++) {
       let randX = this.randomFloatFromInterval(xMin, xMax);
       let randY = this.randomFloatFromInterval(yMin, yMax);
       let res = helper.func(equation, randX);
 
       if (res >= 0 && randY >= 0 && randY <= res) {
-        greenX.push(randX);
-        greenY.push(randY);
+        green.x.push(randX);
+        green.y.push(randY);
+        green.count++;
       } else if (res < 0 && randY <= 0 && randY >= res) {
-        blueX.push(randX);
-        blueY.push(randY);
+        blue.x.push(randX);
+        blue.y.push(randY);
+        blue.count++;
       } else {
-        redX.push(randX);
-        redY.push(randY);
+        red.x.push(randX);
+        red.y.push(randY);
       }
     }
 
+    let result = (((xMax - xMin) * H * (green.count - blue.count)) / N).toFixed(4);
+
+    // console.log("yMin", yMin, "yMax", yMax, "H", H, "green", green, "blue", blue);
+
     return {
-      greenX,
-      greenY,
-      blueX,
-      blueY,
-      redX,
-      redY,
+      green,
+      blue,
+      red,
       result,
     };
   },
@@ -210,10 +209,7 @@ export const helper = {
         default:
           break;
       }
-      str = `${str.substring(
-        0,
-        param.start - func.length - 1
-      )}${res}${str.substring(param.end + 1)}`;
+      str = `${str.substring(0, param.start - func.length - 1)}${res}${str.substring(param.end + 1)}`;
       i = str.indexOf(func);
     }
     return str;
@@ -224,9 +220,7 @@ export const helper = {
     while (i >= 0) {
       let param = this.getGroup(str, i + 6, "{", "}");
       let val = Math.sqrt(Mexp.eval(param.content));
-      str = `${str.substring(0, param.start - 6)}${val}${str.substring(
-        param.end + 1
-      )}`;
+      str = `${str.substring(0, param.start - 6)}${val}${str.substring(param.end + 1)}`;
       i = str.indexOf("\\sqrt");
     }
     return str;
@@ -259,9 +253,7 @@ export const helper = {
     while (i >= 0) {
       let left = this.getGroup(str, i + 6, "{", "}");
       let right = this.getGroup(str, left.end + 2, "{", "}");
-      str = `${str.substring(0, left.start - 6)}(${left.content})/(${
-        right.content
-      })${str.substring(right.end + 1)}`;
+      str = `${str.substring(0, left.start - 6)}(${left.content})/(${right.content})${str.substring(right.end + 1)}`;
       i = str.indexOf("\\frac{");
     }
     return str;

@@ -1,13 +1,7 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import {
-  Container,
-  Grid,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Container, Grid, InputAdornment, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
@@ -34,19 +28,14 @@ function App() {
       setExact(integralExact);
       setRectangle(helper.integralRectangle(a, b, equation, N));
       setTrapezium(helper.integralTrapezium(a, b, equation, N));
-      setMontecarlo(
-        helper.integralMontecarlo(equation, dots, a, b, integralExact)
-      );
+      setMontecarlo(helper.integralMontecarlo(equation, dots, a, b, integralExact));
     } catch (e) {
       console.log(e);
     }
   }, [equation, a, b, N, dots, integralIntervals]);
 
   function latexExp() {
-    return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(
-      /(\d+\d)/g,
-      "{$1}"
-    );
+    return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(/(\d+\d)/g, "{$1}");
   }
 
   return (
@@ -56,9 +45,7 @@ function App() {
           <Grid item xs={12}>
             <div
               id="equationContainer"
-              onClick={() =>
-                eqInputRef.current.element.current.children[0].children[0].focus()
-              }
+              onClick={() => eqInputRef.current.element.current.children[0].children[0].focus()}
             >
               <span id="fx">f(x) = </span>
               <EquationEditor
@@ -82,9 +69,7 @@ function App() {
                 value={a}
                 onChange={(e) => setA(e.target.value)}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">a=</InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start">a=</InputAdornment>,
                 }}
                 fullWidth
               />
@@ -95,9 +80,7 @@ function App() {
                 value={b}
                 onChange={(e) => setB(e.target.value)}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">b=</InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start">b=</InputAdornment>,
                 }}
                 fullWidth
               />
@@ -108,9 +91,7 @@ function App() {
                 value={N}
                 onChange={(e) => setN(e.target.value)}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">N=</InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start">N=</InputAdornment>,
                 }}
                 fullWidth
               />
@@ -121,9 +102,7 @@ function App() {
                 value={dots}
                 onChange={(e) => setDots(e.target.value)}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">Puntos=</InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start">Puntos=</InputAdornment>,
                 }}
                 fullWidth
               />
@@ -173,6 +152,16 @@ function App() {
                 }}
               />
             </Grid>
+            <Grid item xs={4}>
+              <TextField
+                label="Montecarlo"
+                variant="outlined"
+                value={montecarlo.result || 0}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} lg={6}>
@@ -194,28 +183,34 @@ function App() {
                 name: "Rectángulo",
               },
               {
-                x: montecarlo.greenX,
-                y: montecarlo.greenY,
+                x: montecarlo.green?.x,
+                y: montecarlo.green?.y,
                 marker: { color: "green" },
                 mode: "markers",
                 type: "scatter",
-                name: "Montecarlo verde",
+                name: "Montecarlo",
+                legendgroup: "montecarlo",
+                showlegend: true,
               },
               {
-                x: montecarlo.blueX,
-                y: montecarlo.blueY,
+                x: montecarlo.blue?.x,
+                y: montecarlo.blue?.y,
                 marker: { color: "blue" },
                 mode: "markers",
                 type: "scatter",
-                name: "Montecarlo azul",
+                name: "Montecarlo",
+                legendgroup: "montecarlo",
+                showlegend: false,
               },
               {
-                x: montecarlo.redX,
-                y: montecarlo.redY,
+                x: montecarlo.red?.x,
+                y: montecarlo.red?.y,
                 marker: { color: "red" },
                 mode: "markers",
                 type: "scatter",
-                name: "Montecarlo rojo",
+                name: "Montecarlo",
+                legendgroup: "montecarlo",
+                showlegend: false,
               },
             ]}
             layout={{
