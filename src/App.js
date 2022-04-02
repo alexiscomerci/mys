@@ -1,7 +1,13 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import { Container, Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Container,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
@@ -14,24 +20,33 @@ function App() {
   const [a, setA] = useState(0);
   const [b, setB] = useState(1);
   const [N, setN] = useState(2);
+  const [dots, setDots] = useState(100);
   const integralIntervals = 1000;
   const [exact, setExact] = useState({ x: [], y: [], result: 0 });
   const [rectangle, setRectangle] = useState({ x: [], y: [], result: 0 });
   const [trapezium, setTrapezium] = useState({ x: [], y: [], result: 0 });
+  const [montecarlo, setMontecarlo] = useState({ x: [], y: [], result: 0 });
   const eqInputRef = useRef(null);
 
   useEffect(() => {
     try {
-      setExact(helper.integral(a, b, equation, integralIntervals));
+      let integralExact = helper.integral(a, b, equation, integralIntervals);
+      setExact(integralExact);
       setRectangle(helper.integralRectangle(a, b, equation, N));
       setTrapezium(helper.integralTrapezium(a, b, equation, N));
+      setMontecarlo(
+        helper.integralMontecarlo(equation, dots, a, b, integralExact)
+      );
     } catch (e) {
       console.log(e);
     }
-  }, [equation, a, b, N, integralIntervals]);
+  }, [equation, a, b, N, dots, integralIntervals]);
 
   function latexExp() {
-    return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(/(\d+\d)/g, "{$1}");
+    return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(
+      /(\d+\d)/g,
+      "{$1}"
+    );
   }
 
   return (
@@ -41,7 +56,9 @@ function App() {
           <Grid item xs={12}>
             <div
               id="equationContainer"
-              onClick={() => eqInputRef.current.element.current.children[0].children[0].focus()}
+              onClick={() =>
+                eqInputRef.current.element.current.children[0].children[0].focus()
+              }
             >
               <span id="fx">f(x) = </span>
               <EquationEditor
@@ -65,7 +82,9 @@ function App() {
                 value={a}
                 onChange={(e) => setA(e.target.value)}
                 InputProps={{
-                  startAdornment: <InputAdornment position="start">a=</InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">a=</InputAdornment>
+                  ),
                 }}
                 fullWidth
               />
@@ -76,7 +95,9 @@ function App() {
                 value={b}
                 onChange={(e) => setB(e.target.value)}
                 InputProps={{
-                  startAdornment: <InputAdornment position="start">b=</InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">b=</InputAdornment>
+                  ),
                 }}
                 fullWidth
               />
@@ -87,7 +108,22 @@ function App() {
                 value={N}
                 onChange={(e) => setN(e.target.value)}
                 InputProps={{
-                  startAdornment: <InputAdornment position="start">N=</InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">N=</InputAdornment>
+                  ),
+                }}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                variant="outlined"
+                value={dots}
+                onChange={(e) => setDots(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">Puntos=</InputAdornment>
+                  ),
                 }}
                 fullWidth
               />
@@ -156,6 +192,30 @@ function App() {
                 width: (b - a) / N,
                 type: "bar",
                 name: "Rectángulo",
+              },
+              {
+                x: montecarlo.greenX,
+                y: montecarlo.greenY,
+                marker: { color: "green" },
+                mode: "markers",
+                type: "scatter",
+                name: "Montecarlo verde",
+              },
+              {
+                x: montecarlo.blueX,
+                y: montecarlo.blueY,
+                marker: { color: "blue" },
+                mode: "markers",
+                type: "scatter",
+                name: "Montecarlo azul",
+              },
+              {
+                x: montecarlo.redX,
+                y: montecarlo.redY,
+                marker: { color: "red" },
+                mode: "markers",
+                type: "scatter",
+                name: "Montecarlo rojo",
               },
             ]}
             layout={{

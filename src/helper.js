@@ -14,6 +14,8 @@ export const helper = {
     let y1 = this.func(equation, min);
     let x2, y2;
     let dx = (max - min) / num;
+    let yMin = Number.MAX_SAFE_INTEGER;
+    let yMax = Number.MIN_SAFE_INTEGER;
     for (let i = 0; i < num; i++) {
       x2 = +x1 + dx;
       y2 = this.func(equation, x2.toFixed(5));
@@ -23,6 +25,8 @@ export const helper = {
       y1 = y2;
       x.push(x2);
       y.push(y2);
+      yMin = Math.min(yMin, y2);
+      yMax = Math.max(yMax, y2);
     }
 
     result = +result.toFixed(4);
@@ -31,6 +35,8 @@ export const helper = {
       x,
       y,
       result,
+      yMin,
+      yMax,
     };
   },
 
@@ -92,34 +98,49 @@ export const helper = {
     };
   },
 
-  integralMontecarlo(min, max, equationLatex, N) {
-    min = +min;
-    max = +max;
-    N = +N;
+  integralMontecarlo(equationLatex, dots, xMin, xMax, integralExact) {
+    xMin = +xMin;
+    xMax = +xMax;
+    dots = +dots;
+    let yMin = integralExact.yMin - 0.1 * Math.abs(integralExact.yMin);
+    let yMax = integralExact.yMax + 0.1 * Math.abs(integralExact.yMax);
     let equation = this.latexToNormal(equationLatex);
-    let h = (max - min) / N;
-    let x = [];
+    let greenX = [];
+    let blueX = [];
+    let redX = [];
+    let greenY = [];
+    let blueY = [];
+    let redY = [];
     let y = [];
+    let green = 0;
+    let blue = 0;
+    let red = 0;
     let result = 0;
-    let f0 = helper.func(equation, min);
-    x.push(min);
-    y.push(f0);
-    for (let i = 0; i < N; i++) {
-      let randX = this.randomIntFromInterval(a, b);
-      let xLeft = min + i * h;
-      let res = helper.func(equation, xLeft);
-      result += res;
-      x.push(xLeft);
-      y.push(res);
+    // console.log("yMin", yMin, "yMax", yMax);
+    for (let i = 0; i < dots; i++) {
+      let randX = this.randomFloatFromInterval(xMin, xMax);
+      let randY = this.randomFloatFromInterval(yMin, yMax);
+      let res = helper.func(equation, randX);
+
+      if (res >= 0 && randY >= 0 && randY <= res) {
+        greenX.push(randX);
+        greenY.push(randY);
+      } else if (res < 0 && randY <= 0 && randY >= res) {
+        blueX.push(randX);
+        blueY.push(randY);
+      } else {
+        redX.push(randX);
+        redY.push(randY);
+      }
     }
-    let fN = helper.func(equation, max);
-    x.push(max);
-    y.push(fN);
-    result = +(h * (f0 / 2 + result + fN / 2)).toFixed(4);
 
     return {
-      x,
-      y,
+      greenX,
+      greenY,
+      blueX,
+      blueY,
+      redX,
+      redY,
       result,
     };
   },
@@ -189,7 +210,10 @@ export const helper = {
         default:
           break;
       }
-      str = `${str.substring(0, param.start - func.length - 1)}${res}${str.substring(param.end + 1)}`;
+      str = `${str.substring(
+        0,
+        param.start - func.length - 1
+      )}${res}${str.substring(param.end + 1)}`;
       i = str.indexOf(func);
     }
     return str;
@@ -200,7 +224,9 @@ export const helper = {
     while (i >= 0) {
       let param = this.getGroup(str, i + 6, "{", "}");
       let val = Math.sqrt(Mexp.eval(param.content));
-      str = `${str.substring(0, param.start - 6)}${val}${str.substring(param.end + 1)}`;
+      str = `${str.substring(0, param.start - 6)}${val}${str.substring(
+        param.end + 1
+      )}`;
       i = str.indexOf("\\sqrt");
     }
     return str;
@@ -233,7 +259,9 @@ export const helper = {
     while (i >= 0) {
       let left = this.getGroup(str, i + 6, "{", "}");
       let right = this.getGroup(str, left.end + 2, "{", "}");
-      str = `${str.substring(0, left.start - 6)}(${left.content})/(${right.content})${str.substring(right.end + 1)}`;
+      str = `${str.substring(0, left.start - 6)}(${left.content})/(${
+        right.content
+      })${str.substring(right.end + 1)}`;
       i = str.indexOf("\\frac{");
     }
     return str;
@@ -254,8 +282,8 @@ export const helper = {
     };
   },
 
-  randomIntFromInterval(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+  randomFloatFromInterval(min, max) {
+    return (Math.random() * (min - max) + max).toFixed(4);
   },
 };
 
