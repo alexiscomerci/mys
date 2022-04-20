@@ -19,6 +19,7 @@ function App() {
   const [exact, setExact] = useState({ x: [], y: [], result: 0 });
   const [rectangle, setRectangle] = useState({ x: [], y: [], result: 0 });
   const [trapezium, setTrapezium] = useState({ x: [], y: [], result: 0 });
+  const [simpson, setSimpson] = useState({ x: [], y: [], result: 0 });
   const [montecarlo, setMontecarlo] = useState({ x: [], y: [], result: 0 });
   const eqInputRef = useRef(null);
 
@@ -28,6 +29,7 @@ function App() {
       setExact(integralExact);
       setRectangle(helper.integralRectangle(a, b, equation, N));
       setTrapezium(helper.integralTrapezium(a, b, equation, N));
+      setSimpson(helper.integralSimpson(a, b, equation, N));
       setMontecarlo(helper.integralMontecarlo(equation, dots, a, b, integralExact));
     } catch (e) {
       console.log(e);
@@ -154,6 +156,16 @@ function App() {
             </Grid>
             <Grid item xs={4}>
               <TextField
+                label="Simpson"
+                variant="outlined"
+                value={simpson.result || 0}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
                 label="Montecarlo"
                 variant="outlined"
                 value={montecarlo.result || 0}
@@ -173,6 +185,13 @@ function App() {
                 type: "scatter",
                 fill: "tonexty",
                 name: "Trapecio",
+              },
+              {
+                x: simpson.x,
+                y: simpson.y,
+                type: "scatter",
+                fill: "tonexty",
+                name: "Simpson",
               },
               { x: exact.x, y: exact.y, mode: "lines", name: "Exacta" },
               {

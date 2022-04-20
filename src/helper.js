@@ -98,12 +98,46 @@ export const helper = {
     };
   },
 
+  integralSimpson(min, max, equationLatex, N) {
+    min = +min;
+    max = +max;
+    N = +N;
+    let equation = this.latexToNormal(equationLatex);
+    let h = (max - min) / N;
+    let x = [];
+    let y = [];
+    let result = 0;
+    let multiplier = 4;
+    let f0 = helper.func(equation, min);
+    x.push(min);
+    y.push(f0);
+    for (let i = min + h; i < max; i += h) {
+      let res = helper.func(equation, i);
+      result += res * multiplier;
+      x.push(i);
+      y.push(res);
+      multiplier = multiplier === 4 ? 2 : 4;
+    }
+    let fN = helper.func(equation, max);
+    x.push(max);
+    y.push(fN);
+    result = +((h / 3) * (f0 + result + fN)).toFixed(4);
+
+    return {
+      x,
+      y,
+      result,
+    };
+  },
+
   integralMontecarlo(equationLatex, N, xMin, xMax, integralExact) {
     xMin = +xMin;
     xMax = +xMax;
     N = +N;
-    let yMin = integralExact.yMin - 0.1 * Math.abs(integralExact.yMin);
-    let yMax = integralExact.yMax + 0.1 * Math.abs(integralExact.yMax);
+    let yMin = Math.min(integralExact.yMin, 0);
+    let yMax = integralExact.yMax;
+    // yMin = yMin - 0.1 * Math.abs(yMin);
+    // yMax = yMax + 0.1 * Math.abs(yMax);
     let H = yMax - yMin;
     let equation = this.latexToNormal(equationLatex);
     let green = {
