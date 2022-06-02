@@ -18,7 +18,7 @@ export const helper = {
     let yMax = Number.MIN_SAFE_INTEGER;
     for (let i = 0; i < num; i++) {
       x2 = +x1 + dx;
-      y2 = this.func(equation, x2.toFixed(5));
+      y2 = this.func(equation, x2);
       let area = ((y1 + y2) * dx) / 2;
       result += area;
       x1 = x2;
@@ -201,7 +201,8 @@ export const helper = {
 
   //TODO: Calcular primero lo que está en parentesis más chicos
   prepareEcuation(ec, x) {
-    ec = ec.replaceAll("x", `(${x})`);
+    ec = ec.replace(/\d+(?=[a-z])/g, '$&*');
+    ec = ec.replaceAll("x", `(${x.toFixed(5)})`);
     ec = this.replaceSqrts(ec);
     ec = this.replaceTrigFunc(ec, "\\sin");
     ec = this.replaceTrigFunc(ec, "\\cos");
@@ -214,8 +215,7 @@ export const helper = {
     ec = ec.replaceAll("}", ")");
     return ec;
   },
-
-  //TOOD: Si tiene un número a la izquierda multiplicarlo por la func para que no se rompa (ej 3cos(x))
+  
   replaceTrigFunc(str, func) {
     let i = str.indexOf(func);
     while (i >= 0) {
