@@ -43,7 +43,12 @@ function App() {
   return (
     <Container>
       <Grid container spacing={2}>
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={6} container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h5">
+              Función
+            </Typography>
+          </Grid>
           <Grid item xs={12}>
             <div
               id="equationContainer"
@@ -59,12 +64,26 @@ function App() {
               />
             </div>
           </Grid>
-          <Grid item xs={12} pt={3}>
+        </Grid>
+
+        <Grid item xs={6} container spacing={2}>
+          <Grid item xs={12}>
             <Typography variant="h5" component="h5">
-              Variables
+              Integral
             </Typography>
           </Grid>
-          <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <BlockMath>{latexExp()}</BlockMath>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12} container spacing={2}>
+          <Grid item xs={12} pt={5}>
+            <Typography variant="h5" component="h5">
+              Variables generales
+            </Typography>
+          </Grid>
+          <Grid item xs={12} container spacing={2}>
             <Grid item xs={4}>
               <TextField
                 variant="outlined"
@@ -98,27 +117,8 @@ function App() {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={4}>
-              <TextField
-                variant="outlined"
-                value={dots}
-                onChange={(e) => setDots(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">Puntos=</InputAdornment>,
-                }}
-                fullWidth
-              />
-            </Grid>
           </Grid>
-          <Grid item xs={12} pt={3}>
-            <Typography variant="h5" component="h5">
-              Integral
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <BlockMath>{latexExp()}</BlockMath>
-          </Grid>
-          <Grid item xs={12} pt={3} pb={1}>
+          {/* <Grid item xs={12} pt={5} pb={1}>
             <Typography variant="h5" component="h5">
               Resultados
             </Typography>
@@ -174,9 +174,9 @@ function App() {
                 }}
               />
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
-        <Grid item xs={12} lg={6}>
+        {/* <Grid item xs={12} lg={6}>
           <Plot
             data={[
               {
@@ -238,8 +238,6 @@ function App() {
                 zeroline: true,
               },
               yaxis: {
-                // scaleanchor: "x",
-                // scaleratio: "1",
                 title: "f(x)",
                 zeroline: true,
                 yanchor: "top",
@@ -260,10 +258,229 @@ function App() {
             useResizeHandler={true}
             style={{ width: "100%", height: "100%", minHeight: "300px" }}
           />
+        </Grid> */}
+      </Grid>
+      <Grid container spacing={2} pt={5} pb={10}>
+        <Grid item xs={12} pt={5}>
+          <Typography variant="h5" component="h5">
+            Exacta
+          </Typography>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={exact.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} lg={8}>
+          {MyPlot(getExactData())}
+        </Grid>
+
+        <Grid item xs={12} pt={5}>
+          <Typography variant="h5" component="h5">
+            Rectángulo
+          </Typography>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={rectangle.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} lg={8}>
+          {MyPlot(getRectangleData())}
+        </Grid>
+
+        <Grid item xs={12} pt={5}>
+          <Typography variant="h5" component="h5">
+            Trapecio
+          </Typography>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={trapezium.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} lg={8}>
+          {MyPlot(getTrapeziumData())}
+        </Grid>
+
+        <Grid item xs={12} pt={5}>
+          <Typography variant="h5" component="h5">
+            Simpson
+          </Typography>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={simpson.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} lg={8}>
+          {MyPlot(getSimpsonData())}
+        </Grid>
+
+        <Grid item xs={12} pt={5}>
+          <Typography variant="h5" component="h5">
+            Montecarlo
+          </Typography>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Puntos"
+                variant="outlined"
+                value={dots}
+                onChange={(e) => setDots(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Resultado"
+                variant="outlined"
+                value={montecarlo.result || 0}
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} lg={8}>
+          {MyPlot(getMontecarloData())}
         </Grid>
       </Grid>
     </Container>
   );
+
+  function getExactData() {
+    return [{ x: exact.x, y: exact.y, mode: "lines", name: "Exacta" }];
+  }
+
+  function getRectangleData() {
+    return [
+      {
+        x: rectangle.x,
+        y: rectangle.y,
+        width: (b - a) / N,
+        type: "bar",
+        name: "Rectángulo",
+      },
+    ];
+  }
+
+  function getTrapeziumData() {
+    return [
+      {
+        x: trapezium.x,
+        y: trapezium.y,
+        type: "scatter",
+        fill: "tonexty",
+        name: "Trapecio",
+      },
+    ];
+  }
+
+  function getSimpsonData() {
+    return [
+      {
+        x: simpson.x,
+        y: simpson.y,
+        type: "scatter",
+        fill: "tonexty",
+        name: "Simpson",
+      },
+    ];
+  }
+
+  function getMontecarloData() {
+    return [
+      {
+        x: montecarlo.green?.x,
+        y: montecarlo.green?.y,
+        marker: { color: "green" },
+        mode: "markers",
+        type: "scatter",
+        name: "Montecarlo",
+        legendgroup: "montecarlo",
+        showlegend: true,
+      },
+      {
+        x: montecarlo.blue?.x,
+        y: montecarlo.blue?.y,
+        marker: { color: "blue" },
+        mode: "markers",
+        type: "scatter",
+        name: "Montecarlo",
+        legendgroup: "montecarlo",
+        showlegend: false,
+      },
+      {
+        x: montecarlo.red?.x,
+        y: montecarlo.red?.y,
+        marker: { color: "red" },
+        mode: "markers",
+        type: "scatter",
+        name: "Montecarlo",
+        legendgroup: "montecarlo",
+        showlegend: false,
+      },
+      { x: exact.x, y: exact.y, mode: "lines", name: "Exacta" },
+    ];
+  }
+
+  function MyPlot(data) {
+    return (
+      <Plot
+        data={data}
+        layout={{
+          xaxis: {
+            title: "x",
+            zeroline: true,
+          },
+          yaxis: {
+            title: "f(x)",
+            zeroline: true,
+            yanchor: "top",
+          },
+          legend: {
+            orientation: "h",
+            y: 999,
+          },
+          margin: {
+            l: 60,
+            r: 20,
+            b: 40,
+            t: 20,
+            pad: 2,
+          },
+        }}
+        config={{ responsive: true }}
+        useResizeHandler={true}
+        style={{ width: "100%", height: "100%", minHeight: "300px" }}
+      />
+    );
+  }
 }
 
 export default App;

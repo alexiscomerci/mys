@@ -6,7 +6,7 @@ export const helper = {
     max = +max;
     num = +num;
     let equation = this.latexToNormal(equationLatex);
-    console.log(equation);
+    // console.log(equation);
     let x = [];
     let y = [];
     let result = 0;
@@ -151,7 +151,8 @@ export const helper = {
       let randX = this.randomFloatFromInterval(xMin, xMax);
       let randY = this.randomFloatFromInterval(yMin, yMax);
       let res = helper.func(equation, randX);
-
+      // console.log(`equation: ${equation} - randX: ${randX} - randY: ${randY} - res: ${res}`)
+      // console.log(randX)
       if (res >= 0 && randY >= 0 && randY <= res) {
         green.x.push(randX);
         green.y.push(randY);
@@ -166,7 +167,7 @@ export const helper = {
       }
     }
 
-    let result = (((xMax - xMin) * H * (green.count - blue.count)) / N).toFixed(4);
+    let result = (((xMax - xMin) * (H * (green.count - blue.count))) / N).toFixed(4);
 
     // console.log("yMin", yMin, "yMax", yMax, "H", H, "green", green, "blue", blue);
 
@@ -195,13 +196,13 @@ export const helper = {
       //     .replaceAll("}", "")
       // );
     } catch (e) {
-      //   console.log(e);
+      console.log(e);
     }
   },
 
   //TODO: Calcular primero lo que está en parentesis más chicos
   prepareEcuation(ec, x) {
-    ec = ec.replace(/\d+(?=[a-z])/g, '$&*');
+    ec = ec.replace(/\d+(?=[a-z])/g, "$&*");
     ec = ec.replaceAll("x", `(${x.toFixed(5)})`);
     ec = this.replaceSqrts(ec);
     ec = this.replaceTrigFunc(ec, "\\sin");
@@ -215,7 +216,7 @@ export const helper = {
     ec = ec.replaceAll("}", ")");
     return ec;
   },
-  
+
   replaceTrigFunc(str, func) {
     let i = str.indexOf(func);
     while (i >= 0) {
@@ -309,7 +310,7 @@ export const helper = {
   },
 
   randomFloatFromInterval(min, max) {
-    return (Math.random() * (min - max) + max).toFixed(4);
+    return +(Math.random() * (min - max) + max).toFixed(4);
   },
 };
 
