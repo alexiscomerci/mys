@@ -8,6 +8,7 @@ import { BlockMath } from "react-katex";
 import EquationEditor from "equation-editor-react";
 import Plot from "react-plotly.js";
 import helper from "./helper";
+import Comparador from "./Comparador";
 
 function App() {
   const [equation, setEquation] = useState("");
@@ -131,6 +132,8 @@ function App() {
         </Grid>
       </Grid>
 
+
+      {/* METODO EXACTO */}
       {MyCard(
         "Exacta",
         <TextField
@@ -145,71 +148,87 @@ function App() {
         MyPlot(getExactData())
       )}
 
+      {/* METODO RECTÁNGULO */}
       {MyCard(
         "Rectángulo",
-        <TextField
-          label="Resultado"
-          variant="outlined"
-          value={rectangle.result || 0}
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />,
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={rectangle.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+            fullWidth          
+          />
+          <Comparador comparedResult={rectangle.result} exactResult={exact.result}></Comparador>
+        </Grid>,
         MyPlot(getRectangleData())
       )}
 
+      {/* METODO TRAPECIO */}
       {MyCard(
         "Trapecio",
-        <TextField
-          label="Resultado"
-          variant="outlined"
-          value={trapezium.result || 0}
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />,
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={trapezium.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+            fullWidth
+          />
+          <Comparador comparedResult={trapezium.result} exactResult={exact.result}></Comparador>
+        </Grid>,
         MyPlot(getTrapeziumData())
       )}
 
+      {/* METODO SIMPSON */}
       {MyCard(
         "Simpson",
-        <TextField
-          label="Resultado"
-          variant="outlined"
-          value={simpson.result || 0}
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />,
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={simpson.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+            fullWidth
+          />
+          <Comparador comparedResult={simpson.result} exactResult={exact.result}></Comparador>
+        </Grid>,
         MyPlot(getSimpsonData())
       )}
-
+      
+      {/* METODO MONETECARLO */}
       {MyCard(
         "Montecarlo",
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Puntos"
-              variant="outlined"
-              value={dots}
-              onChange={(e) => setDots(e.target.value)}
-              fullWidth
-            />
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Puntos"
+                variant="outlined"
+                value={dots}
+                onChange={(e) => setDots(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Resultado"
+                variant="outlined"
+                value={montecarlo.result || 0}
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Resultado"
-              variant="outlined"
-              value={montecarlo.result || 0}
-              InputProps={{
-                readOnly: true,
-              }}
-              fullWidth
-            />
-          </Grid>
+          <Comparador comparedResult={montecarlo.result} exactResult={exact.result}></Comparador>
         </Grid>,
         MyPlot(getMontecarloData())
       )}
