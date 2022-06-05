@@ -103,7 +103,7 @@ export const helper = {
     max = +max;
     N = +N;
     let equation = this.latexToNormal(equationLatex);
-    let h = (max - min) / N;
+    let h = +((max - min) / N).toFixed(4);
     let x = [];
     let y = [];
     let result = 0;
@@ -111,11 +111,14 @@ export const helper = {
     let f0 = helper.func(equation, min);
     x.push(min);
     y.push(f0);
-    for (let i = min + h; i < max; i += h) {
-      let res = helper.func(equation, i);
+    for (let i = 1; i < N; i++) {
+      x.push(min + i * h);
+    }
+    for (let i = 1; i < x.length; i++) {
+      let res = helper.func(equation, x[i]);
       result += res * multiplier;
-      x.push(i);
       y.push(res);
+      // console.log(`i: ${i} - x: ${x[i]} - mult: ${multiplier} - y: ${res * multiplier}`);
       multiplier = multiplier === 4 ? 2 : 4;
     }
     let fN = helper.func(equation, max);
