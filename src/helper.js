@@ -179,6 +179,22 @@ export const helper = {
     };
   },
 
+  fxVsN(min, max, equationLatex, N) {
+    let x = [];
+    let y = { rectangle: [], trapezium: [], simpson: [] };
+    for (let i = 1; i <= N; i++) {
+      x.push(i);
+      y.rectangle.push(this.integralRectangle(min, max, equationLatex, i).result);
+      y.trapezium.push(this.integralTrapezium(min, max, equationLatex, i).result);
+      y.simpson.push(this.integralSimpson(min, max, equationLatex, i).result);
+    }
+
+    return {
+      x,
+      y,
+    };
+  },
+
   func(ecuation, x) {
     try {
       //   console.log(

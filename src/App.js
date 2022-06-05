@@ -21,6 +21,7 @@ function App() {
   const [trapezium, setTrapezium] = useState({ x: [], y: [], result: 0 });
   const [simpson, setSimpson] = useState({ x: [], y: [], result: 0 });
   const [montecarlo, setMontecarlo] = useState({ x: [], y: [], result: 0 });
+  const [fxVsN, setFxVsN] = useState();
   const eqInputRef = useRef(null);
 
   useEffect(() => {
@@ -30,11 +31,20 @@ function App() {
       setRectangle(helper.integralRectangle(a, b, equation, N));
       setTrapezium(helper.integralTrapezium(a, b, equation, N));
       setSimpson(helper.integralSimpson(a, b, equation, N));
-      setMontecarlo(helper.integralMontecarlo(equation, dots, a, b, integralExact));
+      setFxVsN(helper.fxVsN(a, b, equation, N));
     } catch (e) {
       console.log(e);
     }
-  }, [equation, a, b, N, dots, integralIntervals]);
+  }, [equation, a, b, N, integralIntervals]);
+
+  useEffect(() => {
+    try {
+      setMontecarlo(helper.integralMontecarlo(equation, dots, a, b, exact));
+    } catch (e) {
+      console.log(e);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exact, dots]);
 
   function latexExp() {
     return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(/(\d+\d)/g, "{$1}");
@@ -104,6 +114,7 @@ function App() {
                   startAdornment: <InputAdornment position="start">b=</InputAdornment>,
                 }}
                 fullWidth
+                type="number"
               />
             </Grid>
             <Grid item xs={4}>
@@ -118,150 +129,10 @@ function App() {
               />
             </Grid>
           </Grid>
-          {/* <Grid item xs={12} pt={5} pb={1}>
-            <Typography variant="h5" component="h5">
-              Resultados
-            </Typography>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <TextField
-                label="Exacta"
-                variant="outlined"
-                value={exact.result || 0}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Rectángulo"
-                variant="outlined"
-                value={rectangle.result || 0}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Trapecio"
-                variant="outlined"
-                value={trapezium.result || 0}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Simpson"
-                variant="outlined"
-                value={simpson.result || 0}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Montecarlo"
-                variant="outlined"
-                value={montecarlo.result || 0}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-            </Grid>
-          </Grid> */}
         </Grid>
-        {/* <Grid item xs={12} lg={6}>
-          <Plot
-            data={[
-              {
-                x: trapezium.x,
-                y: trapezium.y,
-                type: "scatter",
-                fill: "tonexty",
-                name: "Trapecio",
-              },
-              {
-                x: simpson.x,
-                y: simpson.y,
-                type: "scatter",
-                fill: "tonexty",
-                name: "Simpson",
-              },
-              { x: exact.x, y: exact.y, mode: "lines", name: "Exacta" },
-              {
-                x: rectangle.x,
-                y: rectangle.y,
-                width: (b - a) / N,
-                type: "bar",
-                name: "Rectángulo",
-              },
-              {
-                x: montecarlo.green?.x,
-                y: montecarlo.green?.y,
-                marker: { color: "green" },
-                mode: "markers",
-                type: "scatter",
-                name: "Montecarlo",
-                legendgroup: "montecarlo",
-                showlegend: true,
-              },
-              {
-                x: montecarlo.blue?.x,
-                y: montecarlo.blue?.y,
-                marker: { color: "blue" },
-                mode: "markers",
-                type: "scatter",
-                name: "Montecarlo",
-                legendgroup: "montecarlo",
-                showlegend: false,
-              },
-              {
-                x: montecarlo.red?.x,
-                y: montecarlo.red?.y,
-                marker: { color: "red" },
-                mode: "markers",
-                type: "scatter",
-                name: "Montecarlo",
-                legendgroup: "montecarlo",
-                showlegend: false,
-              },
-            ]}
-            layout={{
-              xaxis: {
-                title: "x",
-                zeroline: true,
-              },
-              yaxis: {
-                title: "f(x)",
-                zeroline: true,
-                yanchor: "top",
-              },
-              legend: {
-                orientation: "h",
-                y: 999,
-              },
-              margin: {
-                l: 60,
-                r: 20,
-                b: 40,
-                t: 20,
-                pad: 2,
-              },
-            }}
-            config={{ responsive: true }}
-            useResizeHandler={true}
-            style={{ width: "100%", height: "100%", minHeight: "300px" }}
-          />
-        </Grid> */}
       </Grid>
-      <Grid container spacing={2} pt={5} pb={10}>
-        <Grid item xs={12} pt={5}>
+      <Grid container spacing={2} pt={5}>
+        <Grid item xs={12}>
           <Typography variant="h5" component="h5">
             Exacta
           </Typography>
@@ -279,7 +150,9 @@ function App() {
         <Grid item xs={12} lg={8}>
           {MyPlot(getExactData())}
         </Grid>
+      </Grid>
 
+      <Grid container spacing={2} pt={5}>
         <Grid item xs={12} pt={5}>
           <Typography variant="h5" component="h5">
             Rectángulo
@@ -298,8 +171,10 @@ function App() {
         <Grid item xs={12} lg={8}>
           {MyPlot(getRectangleData())}
         </Grid>
+      </Grid>
 
-        <Grid item xs={12} pt={5}>
+      <Grid container spacing={2} pt={5}>
+        <Grid item xs={12}>
           <Typography variant="h5" component="h5">
             Trapecio
           </Typography>
@@ -317,8 +192,10 @@ function App() {
         <Grid item xs={12} lg={8}>
           {MyPlot(getTrapeziumData())}
         </Grid>
+      </Grid>
 
-        <Grid item xs={12} pt={5}>
+      <Grid container spacing={2} pt={5}>
+        <Grid item xs={12}>
           <Typography variant="h5" component="h5">
             Simpson
           </Typography>
@@ -336,8 +213,10 @@ function App() {
         <Grid item xs={12} lg={8}>
           {MyPlot(getSimpsonData())}
         </Grid>
+      </Grid>
 
-        <Grid item xs={12} pt={5}>
+      <Grid container spacing={2} pt={5}>
+        <Grid item xs={12}>
           <Typography variant="h5" component="h5">
             Montecarlo
           </Typography>
@@ -370,6 +249,19 @@ function App() {
           {MyPlot(getMontecarloData())}
         </Grid>
       </Grid>
+
+      {!!fxVsN && (
+        <Grid container spacing={2} pt={5} pb={20}>
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h5">
+              f(x) vs N
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            {MyPlot(getFxVsNData(), "N")}
+          </Grid>
+        </Grid>
+      )}
     </Container>
   );
 
@@ -382,6 +274,7 @@ function App() {
       {
         x: rectangle.x,
         y: rectangle.y,
+        marker: { color: "green" },
         width: (b - a) / N,
         type: "bar",
         name: "Rectángulo",
@@ -394,6 +287,7 @@ function App() {
       {
         x: trapezium.x,
         y: trapezium.y,
+        marker: { color: "red" },
         type: "scatter",
         fill: "tonexty",
         name: "Trapecio",
@@ -406,6 +300,7 @@ function App() {
       {
         x: simpson.x,
         y: simpson.y,
+        marker: { color: "blue" },
         type: "scatter",
         fill: "tonexty",
         name: "Simpson",
@@ -449,13 +344,42 @@ function App() {
     ];
   }
 
-  function MyPlot(data) {
+  function getFxVsNData() {
+    return [
+      {
+        x: fxVsN.x,
+        y: fxVsN.y.rectangle,
+        marker: { color: "green" },
+        mode: "markers",
+        type: "scatter",
+        name: "Rectángulo",
+      },
+      {
+        x: fxVsN.x,
+        y: fxVsN.y.trapezium,
+        marker: { color: "red" },
+        mode: "markers",
+        type: "scatter",
+        name: "Trapecio",
+      },
+      {
+        x: fxVsN.x,
+        y: fxVsN.y.simpson,
+        marker: { color: "blue" },
+        mode: "markers",
+        type: "scatter",
+        name: "Simpson",
+      },
+    ];
+  }
+
+  function MyPlot(data, xaxisTitle) {
     return (
       <Plot
         data={data}
         layout={{
           xaxis: {
-            title: "x",
+            title: xaxisTitle || "x",
             zeroline: true,
           },
           yaxis: {
