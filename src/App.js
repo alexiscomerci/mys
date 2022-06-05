@@ -1,7 +1,7 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import { Container, Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import { Container, Grid, InputAdornment, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
@@ -52,8 +52,8 @@ function App() {
 
   return (
     <Container>
-      <Grid container spacing={2}>
-        <Grid item xs={6} container spacing={2}>
+      <Grid container spacing={5}>
+        <Grid item xs={12} md={6} container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h5" component="h5">
               Función
@@ -76,7 +76,7 @@ function App() {
           </Grid>
         </Grid>
 
-        <Grid item xs={6} container spacing={2}>
+        <Grid item xs={12} md={6} container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h5" component="h5">
               Integral
@@ -114,7 +114,6 @@ function App() {
                   startAdornment: <InputAdornment position="start">b=</InputAdornment>,
                 }}
                 fullWidth
-                type="number"
               />
             </Grid>
             <Grid item xs={4}>
@@ -131,142 +130,129 @@ function App() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container spacing={2} pt={5}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h5">
-            Exacta
-          </Typography>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <TextField
-            label="Resultado"
-            variant="outlined"
-            value={exact.result || 0}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} lg={8}>
-          {MyPlot(getExactData())}
-        </Grid>
-      </Grid>
 
-      <Grid container spacing={2} pt={5}>
-        <Grid item xs={12} pt={5}>
-          <Typography variant="h5" component="h5">
-            Rectángulo
-          </Typography>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <TextField
-            label="Resultado"
-            variant="outlined"
-            value={rectangle.result || 0}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} lg={8}>
-          {MyPlot(getRectangleData())}
-        </Grid>
-      </Grid>
+      {MyCard(
+        "Exacta",
+        <TextField
+          label="Resultado"
+          variant="outlined"
+          value={exact.result || 0}
+          InputProps={{
+            readOnly: true,
+          }}
+          fullWidth
+        />,
+        MyPlot(getExactData())
+      )}
 
-      <Grid container spacing={2} pt={5}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h5">
-            Trapecio
-          </Typography>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <TextField
-            label="Resultado"
-            variant="outlined"
-            value={trapezium.result || 0}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} lg={8}>
-          {MyPlot(getTrapeziumData())}
-        </Grid>
-      </Grid>
+      {MyCard(
+        "Rectángulo",
+        <TextField
+          label="Resultado"
+          variant="outlined"
+          value={rectangle.result || 0}
+          InputProps={{
+            readOnly: true,
+          }}
+          fullWidth
+        />,
+        MyPlot(getRectangleData())
+      )}
 
-      <Grid container spacing={2} pt={5}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h5">
-            Simpson
-          </Typography>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <TextField
-            label="Resultado"
-            variant="outlined"
-            value={simpson.result || 0}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} lg={8}>
-          {MyPlot(getSimpsonData())}
-        </Grid>
-      </Grid>
+      {MyCard(
+        "Trapecio",
+        <TextField
+          label="Resultado"
+          variant="outlined"
+          value={trapezium.result || 0}
+          InputProps={{
+            readOnly: true,
+          }}
+          fullWidth
+        />,
+        MyPlot(getTrapeziumData())
+      )}
 
-      <Grid container spacing={2} pt={5}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h5">
-            Montecarlo
-          </Typography>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                label="Puntos"
-                variant="outlined"
-                value={dots}
-                onChange={(e) => setDots(e.target.value)}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Resultado"
-                variant="outlined"
-                value={montecarlo.result || 0}
-                InputProps={{
-                  readOnly: true,
-                }}
-                fullWidth
-              />
-            </Grid>
+      {MyCard(
+        "Simpson",
+        <TextField
+          label="Resultado"
+          variant="outlined"
+          value={simpson.result || 0}
+          InputProps={{
+            readOnly: true,
+          }}
+          fullWidth
+        />,
+        MyPlot(getSimpsonData())
+      )}
+
+      {MyCard(
+        "Montecarlo",
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              label="Puntos"
+              variant="outlined"
+              value={dots}
+              onChange={(e) => setDots(e.target.value)}
+              fullWidth
+            />
           </Grid>
-        </Grid>
-        <Grid item xs={12} lg={8}>
-          {MyPlot(getMontecarloData())}
-        </Grid>
-      </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Resultado"
+              variant="outlined"
+              value={montecarlo.result || 0}
+              InputProps={{
+                readOnly: true,
+              }}
+              fullWidth
+            />
+          </Grid>
+        </Grid>,
+        MyPlot(getMontecarloData())
+      )}
 
       {!!fxVsN && (
-        <Grid container spacing={2} pt={5} pb={20}>
-          <Grid item xs={12}>
-            <Typography variant="h5" component="h5">
-              f(x) vs N
-            </Typography>
+        <Paper elevation={3}>
+          <Grid container spacing={2} mt={5} mb={20} px={3} pb={3}>
+            <Grid item xs={12}>
+              <Typography variant="h5" component="h5">
+                f(x) vs N
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              {MyPlot(getFxVsNData(), "N")}
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            {MyPlot(getFxVsNData(), "N")}
-          </Grid>
-        </Grid>
+        </Paper>
       )}
     </Container>
   );
 
+  function MyCard(title, data, graph) {
+    return (
+      <Paper elevation={3}>
+        <Grid container spacing={2} mt={5} px={3} pb={3}>
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h5">
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={2}>
+            {data}
+          </Grid>
+          <Grid item xs={12} md={10}>
+            {graph}
+          </Grid>
+        </Grid>
+      </Paper>
+    );
+  }
+
   function getExactData() {
-    return [{ x: exact.x, y: exact.y, mode: "lines", name: "Exacta" }];
+    return [{ x: exact.x, y: exact.y, mode: "lines", fill: "tonexty", name: "Exacta" }];
   }
 
   function getRectangleData() {
