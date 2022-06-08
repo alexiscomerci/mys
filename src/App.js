@@ -1,7 +1,7 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import { Container, Grid, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import { Container, Grid, InputAdornment, Paper, TextField, Typography, Button } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
@@ -11,10 +11,10 @@ import helper from "./helper";
 import Comparador from "./Comparador";
 
 function App() {
-  const [equation, setEquation] = useState("");
+  const [equation, setEquation] = useState("\\sin(x)");
   const [a, setA] = useState(0);
-  const [b, setB] = useState(1);
-  const [N, setN] = useState(2);
+  const [b, setB] = useState(10);
+  const [N, setN] = useState(10);
   const [dots, setDots] = useState(100);
   const integralIntervals = 1000;
   const [exact, setExact] = useState({ x: [], y: [], result: 0 });
@@ -75,7 +75,75 @@ function App() {
               />
             </div>
           </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h7" component="h5">
+              Teclado Virtual
+            </Typography>
+          </Grid>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('x') }}>
+                <BlockMath>{'x'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('x^2') }}>
+                <BlockMath>{'x^2'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('x^3') }}>
+                <BlockMath>{'x^3'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\sin(x)') }}>
+                <BlockMath>{'\\sin(x)'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\cos(x)') }}>
+                <BlockMath>{'\\cos(x)'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\tan(x)') }}>
+                <BlockMath>{'\\tan(x)'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\sqrt{x}') }}>
+                <BlockMath>{'\\sqrt{x}'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\sqrt{x}') }}>
+                <BlockMath>{'\\sqrt[3]{x}'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\frac{1}{2}') }}>
+                <BlockMath>{'\\frac{1}{2}'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\sqrt{x}') }}>
+                <BlockMath>{'\\sqrt[3]{x}'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\log(x)') }}>
+                <BlockMath>{'\\log(x)'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="outlined" size="small" onClick={() => { addToEquation('\\pi') }}>
+                <BlockMath>{'\\pi'}</BlockMath>
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
+        
 
         <Grid item xs={12} md={6} container spacing={2}>
           <Grid item xs={12}>
@@ -85,6 +153,33 @@ function App() {
           </Grid>
           <Grid item xs={12}>
             <BlockMath>{latexExp()}</BlockMath>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h7" component="h5">
+              Ejemplos
+            </Typography>
+          </Grid>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={3}>
+              <Button variant="outlined" size="small" onClick={() => { changeEquation('x^2+5') }}>
+                <BlockMath>{'f(x)=x^2+5'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button variant="outlined" size="small" onClick={() => { changeEquation('x^3+2x') }}>
+                <BlockMath>{'f(x)=x^3+2x'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button variant="outlined" size="small" onClick={() => { changeEquation('\\sin(x)') }}>
+                <BlockMath>{'f(x)=sin(x)'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button variant="outlined" size="small" onClick={() => { changeEquation('\\sqrt{x}') }}>
+                <BlockMath>{'f(x)=\\sqrt{x}'}</BlockMath>
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
 
@@ -268,6 +363,14 @@ function App() {
         </Grid>
       </Paper>
     );
+  }
+
+  function changeEquation(eq) {
+    eqInputRef.current.mathField.latex(eq)
+  }
+
+  function addToEquation(eq) {
+    eqInputRef.current.mathField.latex(equation + '\\cdot ' + eq)
   }
 
   function getExactData() {
