@@ -6,7 +6,7 @@ export default function MySlider(props) {
   const [max, setMax] = useState(props.max || 2);
 
   const handleChange = (event, newValue) => {
-    props.setValue(+newValue);
+    props.setValue(newValue);
   };
 
   return (
@@ -23,9 +23,9 @@ export default function MySlider(props) {
       </Grid>
       <Grid item xs={12}>
         <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-          <TextField value={min} onChange={(e) => setMin(+e.target.value)} label="Min" />
+          <TextField value={min} onChange={(e) => setMin(e.target.value)} label="Min" type="number" />
           <Slider aria-label="Volume" value={props.value} onChange={handleChange} min={min} max={max} />
-          <TextField value={max} onChange={(e) => setMax(+e.target.value)} label="Max" />
+          <TextField value={max} onChange={(e) => setMax(e.target.value)} label="Max" type="number" />
         </Stack>
       </Grid>
     </Grid>
