@@ -2,11 +2,13 @@ import { Grid, InputAdornment, Slider, Stack, TextField } from "@mui/material";
 import React, { useState } from "react";
 
 export default function MySlider(props) {
-  const [min, setMin] = useState(props.min || -2);
-  const [max, setMax] = useState(props.max || 2);
+  const [min, setMin] = useState(props.min);
+  const [max, setMax] = useState(props.max);
 
   const handleChange = (event, newValue) => {
     props.setValue(newValue);
+    if (newValue < +min) setMin(newValue);
+    if (newValue > +max) setMax(newValue);
   };
 
   return (
@@ -14,11 +16,12 @@ export default function MySlider(props) {
       <Grid item xs={12}>
         <TextField
           value={props.value}
-          onChange={(e) => props.setValue(e.target.value)}
+          onChange={(e) => handleChange(e, e.target.value)}
           InputProps={{
             startAdornment: <InputAdornment position="start">{props.label} =</InputAdornment>,
           }}
           fullWidth
+          type="number"
         />
       </Grid>
       <Grid item xs={12}>

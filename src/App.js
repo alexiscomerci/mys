@@ -97,10 +97,10 @@ function App() {
           </Grid>
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={4}>
-              <MySlider value={a} setValue={setA} label="a" />
+              <MySlider value={a} setValue={setA} label="a" min={-10} max={0} />
             </Grid>
             <Grid item xs={4}>
-              <MySlider value={b} setValue={setB} label="b" />
+              <MySlider value={b} setValue={setB} label="b" min={1} max={10} />
             </Grid>
             <Grid item xs={4}>
               <MySlider value={N} setValue={setN} label="N" min={1} max={100} />
