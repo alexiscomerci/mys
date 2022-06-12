@@ -1,12 +1,13 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import { Button, Container, Grid, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
 import Comparador from "./Comparador";
 import EquationEditor from "equation-editor-react";
+import MySlider from "./MySlider";
 import Plot from "react-plotly.js";
 import helper from "./helper";
 
@@ -191,42 +192,17 @@ function App() {
           </Grid>
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={4}>
-              <TextField
-                variant="outlined"
-                value={a}
-                onChange={(e) => setA(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">a=</InputAdornment>,
-                }}
-                fullWidth
-              />
+              <MySlider value={a} setValue={setA} label="a" min={-10} max={0} />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                variant="outlined"
-                value={b}
-                onChange={(e) => setB(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">b=</InputAdornment>,
-                }}
-                fullWidth
-              />
+              <MySlider value={b} setValue={setB} label="b" min={1} max={10} />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                variant="outlined"
-                value={N}
-                onChange={(e) => setN(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">N=</InputAdornment>,
-                }}
-                fullWidth
-              />
+              <MySlider value={N} setValue={setN} label="N" min={1} max={100} />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-
 
       {/* METODO EXACTO */}
       {MyCard(
@@ -254,7 +230,7 @@ function App() {
             InputProps={{
               readOnly: true,
             }}
-            fullWidth          
+            fullWidth
           />
           <Comparador comparedResult={rectangle.result} exactResult={exact.result}></Comparador>
         </Grid>,
@@ -296,7 +272,7 @@ function App() {
         </Grid>,
         MyPlot(getSimpsonData())
       )}
-      
+
       {/* METODO MONETECARLO */}
       {MyCard(
         "Monte Carlo",
