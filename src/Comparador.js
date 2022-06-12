@@ -1,7 +1,6 @@
-
-import {TextField } from "@mui/material";
 import * as React from 'react';
 
+import {TextField} from "@mui/material";
 
 export default function Comparador(props) {
     return (
@@ -10,7 +9,7 @@ export default function Comparador(props) {
             <br></br>
             Diferencia con método exacto:
             <TextField
-                value={(Math.abs(100-(props.comparedResult*100)/props.exactResult)).toFixed(4) + "%"|| 0 + "%"}
+                value={(Math.abs(100-(props.comparedResult*100)/props.exactResult)).toFixed(2) + "%"|| 0 + "%"}
                 disable = {true}
                 InputProps={{
                     readOnly: true,
