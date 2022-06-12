@@ -5,10 +5,10 @@ import { Container, Grid, InputAdornment, Paper, TextField, Typography } from "@
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
+import Comparador from "./Comparador";
 import EquationEditor from "equation-editor-react";
 import Plot from "react-plotly.js";
 import helper from "./helper";
-import Comparador from "./Comparador";
 
 function App() {
   const [equation, setEquation] = useState("");
@@ -25,27 +25,27 @@ function App() {
   const [fxVsN, setFxVsN] = useState();
   const eqInputRef = useRef(null);
 
-  useEffect(() => {
-    try {
-      let integralExact = helper.integral(a, b, equation, integralIntervals);
-      setExact(integralExact);
-      setRectangle(helper.integralRectangle(a, b, equation, N));
-      setTrapezium(helper.integralTrapezium(a, b, equation, N));
-      setSimpson(helper.integralSimpson(a, b, equation, N));
-      setFxVsN(helper.fxVsN(a, b, equation, N));
-    } catch (e) {
-      console.log(e);
-    }
-  }, [equation, a, b, N, integralIntervals]);
+  // useEffect(() => {
+  //   try {
+  //     let integralExact = helper.integral(a, b, equation, integralIntervals);
+  //     setExact(integralExact);
+  //     setRectangle(helper.integralRectangle(a, b, equation, N));
+  //     setTrapezium(helper.integralTrapezium(a, b, equation, N));
+  //     setSimpson(helper.integralSimpson(a, b, equation, N));
+  //     setFxVsN(helper.fxVsN(a, b, equation, N));
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }, [equation, a, b, N, integralIntervals]);
 
-  useEffect(() => {
-    try {
-      setMontecarlo(helper.integralMontecarlo(equation, dots, a, b, exact));
-    } catch (e) {
-      console.log(e);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exact, dots]);
+  // useEffect(() => {
+  //   try {
+  //     setMontecarlo(helper.integralMontecarlo(equation, dots, a, b, exact));
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [exact, dots]);
 
   function latexExp() {
     return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(/(\d+\d)/g, "{$1}");
