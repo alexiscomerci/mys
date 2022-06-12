@@ -271,9 +271,22 @@ export const helper = {
   replaceSqrts(str) {
     let i = str.indexOf("\\sqrt");
     while (i >= 0) {
-      let param = this.getGroup(str, i + 6, "{", "}");
-      let val = Math.sqrt(Mexp.eval(param.content));
-      str = `${str.substring(0, param.start - 6)}${val}${str.substring(param.end + 1)}`;
+      let exp = this.getGroup(str, i + str.indexOf("[") + 1, "[", "]");
+      let param = this.getGroup(str, i + str.indexOf("{") + 1, "{", "}");
+      let val = 0;
+      let isSquare = exp.end === str.length - 1;
+
+      if (isSquare)
+        val = Math.sqrt(Mexp.eval(param.content));
+      else {
+        let number = +param.content.substring(1, param.content.length - 1);
+        if (+exp.content % 2 === 0 && number < 0)
+          val = 0;
+        else
+          val = Math.pow(Math.abs(number), 1/+exp.content) * (number > 0 ? 1 : -1);
+      }
+
+      str = `${str.substring(0, param.start - str.indexOf("{") - 2)}${val}${str.substring(param.end + 1)}`;
       i = str.indexOf("\\sqrt");
     }
     return str;
