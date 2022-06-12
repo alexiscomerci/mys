@@ -1,14 +1,14 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import { Container, Grid, InputAdornment, Paper, TextField, Typography, Button } from "@mui/material";
+import { Button, Container, Grid, InputAdornment, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
+import Comparador from "./Comparador";
 import EquationEditor from "equation-editor-react";
 import Plot from "react-plotly.js";
 import helper from "./helper";
-import Comparador from "./Comparador";
 
 function App() {
   const [equation, setEquation] = useState("\\sin(x)");
@@ -16,7 +16,7 @@ function App() {
   const [b, setB] = useState(10);
   const [N, setN] = useState(10);
   const [dots, setDots] = useState(100);
-  const integralIntervals = 1000;
+  const integralIntervals = 10000;
   const [exact, setExact] = useState({ x: [], y: [], result: 0 });
   const [rectangle, setRectangle] = useState({ x: [], y: [], result: 0 });
   const [trapezium, setTrapezium] = useState({ x: [], y: [], result: 0 });
@@ -299,7 +299,7 @@ function App() {
       
       {/* METODO MONETECARLO */}
       {MyCard(
-        "Montecarlo",
+        "Monte Carlo",
         <Grid xs={12} sm={12} md={12} lg={12}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -421,7 +421,7 @@ function App() {
       {
         x: montecarlo.green?.x,
         y: montecarlo.green?.y,
-        marker: { color: "green" },
+        marker: { color: "green", size: 2 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
@@ -431,7 +431,7 @@ function App() {
       {
         x: montecarlo.blue?.x,
         y: montecarlo.blue?.y,
-        marker: { color: "blue" },
+        marker: { color: "blue", size: 2 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
@@ -441,14 +441,14 @@ function App() {
       {
         x: montecarlo.red?.x,
         y: montecarlo.red?.y,
-        marker: { color: "red" },
+        marker: { color: "red", size: 2 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
         legendgroup: "montecarlo",
         showlegend: false,
       },
-      { x: exact.x, y: exact.y, mode: "lines", name: "Exacta" },
+      { x: exact.x, y: exact.y, mode: "lines", name: "Exacta", marker: { color: "black" } },
     ];
   }
 
