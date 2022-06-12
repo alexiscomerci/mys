@@ -83,62 +83,62 @@ function App() {
           </Grid>
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('+') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('+') }}>
                 <BlockMath>{'+'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('-') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('-') }}>
                 <BlockMath>{'-'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\cdot') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\cdot') }}>
                 <BlockMath>{'\\cdot'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\frac{}{}') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\frac{}{}') }}>
                 <BlockMath>{'/'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('x^2') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('x^2') }}>
                 <BlockMath>{'x^2'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\sqrt{x}') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\sqrt{x}') }}>
                 <BlockMath>{'\\sqrt{x}'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\sin(x)') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\sin(x)') }}>
                 <BlockMath>{'\\sin(x)'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\cos(x)') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\cos(x)') }}>
                 <BlockMath>{'\\cos(x)'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\tan(x)') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\tan(x)') }}>
                 <BlockMath>{'\\tan(x)'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\log(x)') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\log(x)') }}>
                 <BlockMath>{'\\log(x)'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\pi') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\pi') }}>
                 <BlockMath>{'\\pi'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { addToEquation('\\sqrt[3]{x}') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { addToEquation('\\sqrt[3]{x}') }}>
                 <BlockMath>{'\\sqrt[3]{x}'}</BlockMath>
               </Button>
             </Grid>
@@ -161,23 +161,28 @@ function App() {
           </Grid>
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={3}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { changeEquation('x^2+5') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { changeEquation('x^2+5') }}>
                 <BlockMath>{'f(x)=x^2+5'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={3}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { changeEquation('x^3+2x') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { changeEquation('x^3+2x') }}>
                 <BlockMath>{'f(x)=x^3+2x'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={3}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { changeEquation('\\sin(x)') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { changeEquation('\\sin(x)') }}>
                 <BlockMath>{'f(x)=sin(x)'}</BlockMath>
               </Button>
             </Grid>
             <Grid item xs={3}>
-              <Button variant="outlined" size="small" style={{textTransform: 'none'}} onClick={() => { changeEquation('\\sqrt{x}') }}>
+              <Button variant="outlined" size="small" style={{textTransform: 'none'}} fullWidth onClick={() => { changeEquation('\\sqrt{x}') }}>
                 <BlockMath>{'f(x)=\\sqrt{x}'}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="outlined" size="small" style={{visibility: "hidden"}}>
+                <BlockMath>{'f(x)='}</BlockMath>
               </Button>
             </Grid>
           </Grid>
@@ -396,7 +401,7 @@ function App() {
       {
         x: montecarlo.green?.x,
         y: montecarlo.green?.y,
-        marker: { color: "green", size: 2 },
+        marker: { color: "green", size: 4 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
@@ -406,7 +411,7 @@ function App() {
       {
         x: montecarlo.blue?.x,
         y: montecarlo.blue?.y,
-        marker: { color: "blue", size: 2 },
+        marker: { color: "blue", size: 4 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
@@ -416,7 +421,7 @@ function App() {
       {
         x: montecarlo.red?.x,
         y: montecarlo.red?.y,
-        marker: { color: "red", size: 2 },
+        marker: { color: "red", size: 4 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
