@@ -9,7 +9,6 @@ import EquationEditor from "equation-editor-react";
 import Plot from "react-plotly.js";
 import helper from "./helper";
 import Tooltip from '@mui/material/Tooltip';
-import InfoIcon from './info.png';
 
 function App() {
   const [equation, setEquation] = useState("");
