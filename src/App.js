@@ -8,6 +8,8 @@ import { BlockMath } from "react-katex";
 import EquationEditor from "equation-editor-react";
 import Plot from "react-plotly.js";
 import helper from "./helper";
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from './info.png';
 
 function App() {
   const [equation, setEquation] = useState("");
@@ -142,7 +144,8 @@ function App() {
           }}
           fullWidth
         />,
-        MyPlot(getExactData())
+        MyPlot(getExactData()),
+        "El método de exacta es un método utilizado para resolver ecuaciones diferenciales. El mismo consiste en calcular el comportamiento de una función en el paso de un tiempo (dentro de los intervalos establecidos)."
       )}
 
       {MyCard(
@@ -156,7 +159,8 @@ function App() {
           }}
           fullWidth
         />,
-        MyPlot(getRectangleData())
+        MyPlot(getRectangleData()),
+        "El método de integración por rectángulos (Método del rectángulo) es un método utilizado para calcular el área bajo una curva. El mismo consiste en dividir en ‘N’ intervalos una función, generando subintervalos más pequeños (pequeños rectángulos) que abarquen toda el área bajo la curva, para así calcular la misma."
       )}
 
       {MyCard(
@@ -170,7 +174,8 @@ function App() {
           }}
           fullWidth
         />,
-        MyPlot(getTrapeziumData())
+        MyPlot(getTrapeziumData()),
+        "El método de integración por trapecios (Método del trapecio) es otro de los métodos utilizados para calcular el área bajo una curva, para esto se establecen limites sobre los cuales se divide a la función en N sub áreas para luego calcular su valor, asumiendo a cada sub área como un pequeño trapecio."
       )}
 
       {MyCard(
@@ -184,7 +189,8 @@ function App() {
           }}
           fullWidth
         />,
-        MyPlot(getSimpsonData())
+        MyPlot(getSimpsonData()),
+        "El método de integración por Simpson es un método de aproximación de integrales definidas, el cual tiene dos variantes donde cada una toma como base a un método de integración."
       )}
 
       {MyCard(
@@ -211,7 +217,8 @@ function App() {
             />
           </Grid>
         </Grid>,
-        MyPlot(getMontecarloData())
+        MyPlot(getMontecarloData()),
+        "El Método de Montecarlo es un método estadístico utilizado para aproximar expresiones matemáticas complejas que son costosas de evaluar con exactitud. En este caso práctico se utiliza para aproximar el área bajo una curva."
       )}
 
       {!!fxVsN && (
@@ -221,6 +228,9 @@ function App() {
               <Typography variant="h5" component="h5">
                 f(x) vs N
               </Typography>
+              <Tooltip  placement="right" title={<Typography fontSize={18}>Este grafico representa una comparación entre tres métodos (Rectángulo – Trapecio – Simpson), en la cual podemos apreciar como cada método de integración va mejorando su aproximación al incrementar los N (puntos) en el calculo de los mismos.</Typography>}>
+                <img src={require("./info.png")} width="20px" height="20px" />
+            </Tooltip>
             </Grid>
             <Grid item xs={12}>
               {MyPlot(getFxVsNData(), "N")}
@@ -231,7 +241,7 @@ function App() {
     </Container>
   );
 
-  function MyCard(title, data, graph) {
+  function MyCard(title, data, graph, description) {
     return (
       <Paper elevation={3}>
         <Grid container spacing={2} mt={5} px={3} pb={3}>
@@ -239,6 +249,9 @@ function App() {
             <Typography variant="h5" component="h5">
               {title}
             </Typography>
+            <Tooltip  placement="right" title={<Typography fontSize={18}>{description}</Typography>}>
+              <img src={require("./info.png")} width="20px" height="20px" />
+            </Tooltip>
           </Grid>
           <Grid item xs={12} md={2}>
             {data}
