@@ -1,7 +1,14 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
@@ -51,7 +58,10 @@ function App() {
   }, [exact, dots]);
 
   function latexExp() {
-    return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(/(\d+\d)/g, "{$1}");
+    return `\\int_{${a}}^{${b}} \\left(${equation}\\right) \\, dx`.replace(
+      /(\d+\d)/g,
+      "{$1}"
+    );
   }
 
   return (
@@ -66,7 +76,9 @@ function App() {
           <Grid item xs={12}>
             <div
               id="equationContainer"
-              onClick={() => eqInputRef.current.element.current.children[0].children[0].focus()}
+              onClick={() =>
+                eqInputRef.current.element.current.children[0].children[0].focus()
+              }
             >
               <span id="fx">f(x) = </span>
               <EquationEditor
@@ -311,7 +323,11 @@ function App() {
               </Button>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="outlined" size="small" style={{ visibility: "hidden" }}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ visibility: "hidden" }}
+              >
                 <BlockMath>{"f(x)="}</BlockMath>
               </Button>
             </Grid>
@@ -340,7 +356,7 @@ function App() {
 
       {/* METODO EXACTO */}
       {MyCard(
-        "Exacta",
+        "Valor de referencia",
         <TextField
           label="Resultado"
           variant="outlined"
@@ -367,7 +383,10 @@ function App() {
             }}
             fullWidth
           />
-          <Comparador comparedResult={rectangle.result} exactResult={exact.result}></Comparador>
+          <Comparador
+            comparedResult={rectangle.result}
+            exactResult={exact.result}
+          ></Comparador>
         </Grid>,
         MyPlot(getRectangleData()),
         "El método de integración por rectángulos (Método del rectángulo) es un método utilizado para calcular el área bajo una curva. El mismo consiste en dividir en ‘N’ intervalos una función, generando subintervalos más pequeños (pequeños rectángulos) que abarquen toda el área bajo la curva, para así calcular la misma."
@@ -386,7 +405,10 @@ function App() {
             }}
             fullWidth
           />
-          <Comparador comparedResult={trapezium.result} exactResult={exact.result}></Comparador>
+          <Comparador
+            comparedResult={trapezium.result}
+            exactResult={exact.result}
+          ></Comparador>
         </Grid>,
         MyPlot(getTrapeziumData()),
         "El método de integración por trapecios (Método del trapecio) es otro de los métodos utilizados para calcular el área bajo una curva, para esto se establecen limites sobre los cuales se divide a la función en N sub áreas para luego calcular su valor, asumiendo a cada sub área como un pequeño trapecio."
@@ -405,7 +427,10 @@ function App() {
             }}
             fullWidth
           />
-          <Comparador comparedResult={simpson.result} exactResult={exact.result}></Comparador>
+          <Comparador
+            comparedResult={simpson.result}
+            exactResult={exact.result}
+          ></Comparador>
         </Grid>,
         MyPlot(getSimpsonData()),
         "El método de integración por Simpson es un método de aproximación de integrales definidas, el cual tiene dos variantes donde cada una toma como base a un método de integración."
@@ -437,7 +462,10 @@ function App() {
               />
             </Grid>
           </Grid>
-          <Comparador comparedResult={montecarlo.result} exactResult={exact.result}></Comparador>
+          <Comparador
+            comparedResult={montecarlo.result}
+            exactResult={exact.result}
+          ></Comparador>
         </Grid>,
         MyPlot(getMontecarloData()),
         "El Método de Monte Carlo es un método estadístico utilizado para aproximar expresiones matemáticas complejas que son costosas de evaluar con exactitud. En este caso práctico se utiliza para aproximar el área bajo una curva."
@@ -446,7 +474,11 @@ function App() {
       {!!fxVsN && (
         <Paper elevation={3}>
           <Grid container spacing={2} mt={5} mb={20} px={3} pb={3}>
-            <Grid item xs={12} style={{display: 'flex', alignItems: 'center'}}>
+            <Grid
+              item
+              xs={12}
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <Typography variant="h5" component="h5" mr={1}>
                 f(x) vs N
               </Typography>
@@ -454,9 +486,11 @@ function App() {
                 placement="right"
                 title={
                   <Typography fontSize={18}>
-                    Este grafico representa una comparación entre tres métodos (Rectángulo – Trapecio – Simpson), en la
-                    cual podemos apreciar como cada método de integración va mejorando su aproximación al incrementar
-                    los N (puntos) en el calculo de los mismos.
+                    Este grafico representa una comparación entre tres métodos
+                    (Rectángulo – Trapecio – Simpson), en la cual podemos
+                    apreciar como cada método de integración va mejorando su
+                    aproximación al incrementar los N (puntos) en el calculo de
+                    los mismos.
                   </Typography>
                 }
               >
@@ -476,11 +510,14 @@ function App() {
     return (
       <Paper elevation={3}>
         <Grid container spacing={2} mt={5} px={3} pb={3}>
-          <Grid item xs={12} style={{display: 'flex', alignItems: 'center'}}>
+          <Grid item xs={12} style={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h5" component="h5" mr={1}>
               {title}
             </Typography>
-            <Tooltip placement="right" title={<Typography fontSize={18}>{description}</Typography>}>
+            <Tooltip
+              placement="right"
+              title={<Typography fontSize={18}>{description}</Typography>}
+            >
               <InfoIcon />
             </Tooltip>
           </Grid>
@@ -504,7 +541,15 @@ function App() {
   }
 
   function getExactData() {
-    return [{ x: exact.x, y: exact.y, mode: "lines", fill: "tonexty", name: "Exacta" }];
+    return [
+      {
+        x: exact.x,
+        y: exact.y,
+        mode: "lines",
+        fill: "tonexty",
+        name: "Referencia",
+      },
+    ];
   }
 
   function getRectangleData() {
@@ -578,7 +623,13 @@ function App() {
         legendgroup: "montecarlo",
         showlegend: false,
       },
-      { x: exact.x, y: exact.y, mode: "lines", name: "Exacta", marker: { color: "black" } },
+      {
+        x: exact.x,
+        y: exact.y,
+        mode: "lines",
+        name: "Referencia",
+        marker: { color: "black" },
+      },
     ];
   }
 

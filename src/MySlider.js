@@ -18,7 +18,9 @@ export default function MySlider(props) {
           value={props.value}
           onChange={(e) => handleChange(e, e.target.value)}
           InputProps={{
-            startAdornment: <InputAdornment position="start">{props.label} =</InputAdornment>,
+            startAdornment: (
+              <InputAdornment position="start">{props.label} =</InputAdornment>
+            ),
           }}
           fullWidth
           type="number"
@@ -26,9 +28,25 @@ export default function MySlider(props) {
       </Grid>
       <Grid item xs={12}>
         <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-          <TextField value={min} onChange={(e) => setMin(e.target.value)} label="Min" type="number" />
-          <Slider aria-label="Volume" value={props.value} onChange={handleChange} min={min} max={max} />
-          <TextField value={max} onChange={(e) => setMax(e.target.value)} label="Max" type="number" />
+          <TextField
+            value={min}
+            onChange={(e) => setMin(e.target.value)}
+            label="Min"
+            type="number"
+          />
+          <Slider
+            aria-label="Volume"
+            value={props.value}
+            onChange={handleChange}
+            min={min}
+            max={max}
+          />
+          <TextField
+            value={max}
+            onChange={(e) => setMax(e.target.value)}
+            label="Max"
+            type="number"
+          />
         </Stack>
       </Grid>
     </Grid>
