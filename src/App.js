@@ -1,20 +1,23 @@
 import "./App.css";
 import "katex/dist/katex.min.css";
 
-import { Container, Grid, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 import { BlockMath } from "react-katex";
+import Comparador from "./Comparador";
 import EquationEditor from "equation-editor-react";
+import MySlider from "./MySlider";
 import Plot from "react-plotly.js";
 import helper from "./helper";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
+import InfoIcon from "@mui/icons-material/Info";
 
 function App() {
-  const [equation, setEquation] = useState("");
+  const [equation, setEquation] = useState("\\sin(x)");
   const [a, setA] = useState(0);
   const [b, setB] = useState(1);
-  const [N, setN] = useState(2);
+  const [N, setN] = useState(10);
   const [dots, setDots] = useState(100);
   const integralIntervals = 1000;
   const [exact, setExact] = useState({ x: [], y: [], result: 0 });
@@ -75,6 +78,169 @@ function App() {
               />
             </div>
           </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h7" component="h5">
+              Teclado Virtual
+            </Typography>
+          </Grid>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("+");
+                }}
+              >
+                <BlockMath>{"+"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("-");
+                }}
+              >
+                <BlockMath>{"-"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\cdot");
+                }}
+              >
+                <BlockMath>{"\\cdot"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\frac{}{}");
+                }}
+              >
+                <BlockMath>{"/"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("x^2");
+                }}
+              >
+                <BlockMath>{"x^2"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\sqrt{x}");
+                }}
+              >
+                <BlockMath>{"\\sqrt{x}"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\sin(x)");
+                }}
+              >
+                <BlockMath>{"\\sin(x)"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\cos(x)");
+                }}
+              >
+                <BlockMath>{"\\cos(x)"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\tan(x)");
+                }}
+              >
+                <BlockMath>{"\\tan(x)"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\log(x)");
+                }}
+              >
+                <BlockMath>{"\\log(x)"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\pi");
+                }}
+              >
+                <BlockMath>{"\\pi"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  addToEquation("\\sqrt[3]{x}");
+                }}
+              >
+                <BlockMath>{"\\sqrt[3]{x}"}</BlockMath>
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid item xs={12} md={6} container spacing={2}>
@@ -86,6 +252,70 @@ function App() {
           <Grid item xs={12}>
             <BlockMath>{latexExp()}</BlockMath>
           </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h7" component="h5">
+              Ejemplos
+            </Typography>
+          </Grid>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={3}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  changeEquation("x^2+5");
+                }}
+              >
+                <BlockMath>{"f(x)=x^2+5"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  changeEquation("x^3+2x");
+                }}
+              >
+                <BlockMath>{"f(x)=x^3+2x"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  changeEquation("\\sin(x)");
+                }}
+              >
+                <BlockMath>{"f(x)=sin(x)"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textTransform: "none" }}
+                fullWidth
+                onClick={() => {
+                  changeEquation("\\sqrt{x}");
+                }}
+              >
+                <BlockMath>{"f(x)=\\sqrt{x}"}</BlockMath>
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="outlined" size="small" style={{ visibility: "hidden" }}>
+                <BlockMath>{"f(x)="}</BlockMath>
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid item xs={12} container spacing={2}>
@@ -96,42 +326,19 @@ function App() {
           </Grid>
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={4}>
-              <TextField
-                variant="outlined"
-                value={a}
-                onChange={(e) => setA(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">a=</InputAdornment>,
-                }}
-                fullWidth
-              />
+              <MySlider value={a} setValue={setA} label="a" min={-10} max={0} />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                variant="outlined"
-                value={b}
-                onChange={(e) => setB(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">b=</InputAdornment>,
-                }}
-                fullWidth
-              />
+              <MySlider value={b} setValue={setB} label="b" min={1} max={10} />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                variant="outlined"
-                value={N}
-                onChange={(e) => setN(e.target.value)}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">N=</InputAdornment>,
-                }}
-                fullWidth
-              />
+              <MySlider value={N} setValue={setN} label="N" min={1} max={100} />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
 
+      {/* METODO EXACTO */}
       {MyCard(
         "Exacta",
         <TextField
@@ -147,89 +354,114 @@ function App() {
         "El método de exacta es un método utilizado para resolver ecuaciones diferenciales. El mismo consiste en calcular el comportamiento de una función en el paso de un tiempo (dentro de los intervalos establecidos)."
       )}
 
+      {/* METODO RECTÁNGULO */}
       {MyCard(
         "Rectángulo",
-        <TextField
-          label="Resultado"
-          variant="outlined"
-          value={rectangle.result || 0}
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />,
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={rectangle.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+            fullWidth
+          />
+          <Comparador comparedResult={rectangle.result} exactResult={exact.result}></Comparador>
+        </Grid>,
         MyPlot(getRectangleData()),
         "El método de integración por rectángulos (Método del rectángulo) es un método utilizado para calcular el área bajo una curva. El mismo consiste en dividir en ‘N’ intervalos una función, generando subintervalos más pequeños (pequeños rectángulos) que abarquen toda el área bajo la curva, para así calcular la misma."
       )}
 
+      {/* METODO TRAPECIO */}
       {MyCard(
         "Trapecio",
-        <TextField
-          label="Resultado"
-          variant="outlined"
-          value={trapezium.result || 0}
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />,
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={trapezium.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+            fullWidth
+          />
+          <Comparador comparedResult={trapezium.result} exactResult={exact.result}></Comparador>
+        </Grid>,
         MyPlot(getTrapeziumData()),
         "El método de integración por trapecios (Método del trapecio) es otro de los métodos utilizados para calcular el área bajo una curva, para esto se establecen limites sobre los cuales se divide a la función en N sub áreas para luego calcular su valor, asumiendo a cada sub área como un pequeño trapecio."
       )}
 
+      {/* METODO SIMPSON */}
       {MyCard(
         "Simpson",
-        <TextField
-          label="Resultado"
-          variant="outlined"
-          value={simpson.result || 0}
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />,
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <TextField
+            label="Resultado"
+            variant="outlined"
+            value={simpson.result || 0}
+            InputProps={{
+              readOnly: true,
+            }}
+            fullWidth
+          />
+          <Comparador comparedResult={simpson.result} exactResult={exact.result}></Comparador>
+        </Grid>,
         MyPlot(getSimpsonData()),
         "El método de integración por Simpson es un método de aproximación de integrales definidas, el cual tiene dos variantes donde cada una toma como base a un método de integración."
       )}
 
+      {/* METODO MONETECARLO */}
       {MyCard(
-        "Montecarlo",
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Puntos"
-              variant="outlined"
-              value={dots}
-              onChange={(e) => setDots(e.target.value)}
-              fullWidth
-            />
+        "Monte Carlo",
+        <Grid xs={12} sm={12} md={12} lg={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Puntos"
+                variant="outlined"
+                value={dots}
+                onChange={(e) => setDots(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Resultado"
+                variant="outlined"
+                value={montecarlo.result || 0}
+                InputProps={{
+                  readOnly: true,
+                }}
+                fullWidth
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Resultado"
-              variant="outlined"
-              value={montecarlo.result || 0}
-              InputProps={{
-                readOnly: true,
-              }}
-              fullWidth
-            />
-          </Grid>
+          <Comparador comparedResult={montecarlo.result} exactResult={exact.result}></Comparador>
         </Grid>,
         MyPlot(getMontecarloData()),
-        "El Método de Montecarlo es un método estadístico utilizado para aproximar expresiones matemáticas complejas que son costosas de evaluar con exactitud. En este caso práctico se utiliza para aproximar el área bajo una curva."
+        "El Método de Monte Carlo es un método estadístico utilizado para aproximar expresiones matemáticas complejas que son costosas de evaluar con exactitud. En este caso práctico se utiliza para aproximar el área bajo una curva."
       )}
 
       {!!fxVsN && (
         <Paper elevation={3}>
           <Grid container spacing={2} mt={5} mb={20} px={3} pb={3}>
-            <Grid item xs={12}>
-              <Typography variant="h5" component="h5">
+            <Grid item xs={12} style={{display: 'flex', alignItems: 'center'}}>
+              <Typography variant="h5" component="h5" mr={1}>
                 f(x) vs N
               </Typography>
-              <Tooltip  placement="right" title={<Typography fontSize={18}>Este grafico representa una comparación entre tres métodos (Rectángulo – Trapecio – Simpson), en la cual podemos apreciar como cada método de integración va mejorando su aproximación al incrementar los N (puntos) en el calculo de los mismos.</Typography>}>
-                <img src={require("./info.png")} width="20px" height="20px" />
-            </Tooltip>
+              <Tooltip
+                placement="right"
+                title={
+                  <Typography fontSize={18}>
+                    Este grafico representa una comparación entre tres métodos (Rectángulo – Trapecio – Simpson), en la
+                    cual podemos apreciar como cada método de integración va mejorando su aproximación al incrementar
+                    los N (puntos) en el calculo de los mismos.
+                  </Typography>
+                }
+              >
+                <InfoIcon />
+              </Tooltip>
             </Grid>
             <Grid item xs={12}>
               {MyPlot(getFxVsNData(), "N")}
@@ -244,12 +476,12 @@ function App() {
     return (
       <Paper elevation={3}>
         <Grid container spacing={2} mt={5} px={3} pb={3}>
-          <Grid item xs={12}>
-            <Typography variant="h5" component="h5">
+          <Grid item xs={12} style={{display: 'flex', alignItems: 'center'}}>
+            <Typography variant="h5" component="h5" mr={1}>
               {title}
             </Typography>
-            <Tooltip  placement="right" title={<Typography fontSize={18}>{description}</Typography>}>
-              <img src={require("./info.png")} width="20px" height="20px" />
+            <Tooltip placement="right" title={<Typography fontSize={18}>{description}</Typography>}>
+              <InfoIcon />
             </Tooltip>
           </Grid>
           <Grid item xs={12} md={2}>
@@ -261,6 +493,14 @@ function App() {
         </Grid>
       </Paper>
     );
+  }
+
+  function changeEquation(eq) {
+    eqInputRef.current.mathField.latex(eq);
+  }
+
+  function addToEquation(eq) {
+    eqInputRef.current.mathField.latex(equation + eq);
   }
 
   function getExactData() {
@@ -311,7 +551,7 @@ function App() {
       {
         x: montecarlo.green?.x,
         y: montecarlo.green?.y,
-        marker: { color: "green" },
+        marker: { color: "green", size: 4 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
@@ -321,7 +561,7 @@ function App() {
       {
         x: montecarlo.blue?.x,
         y: montecarlo.blue?.y,
-        marker: { color: "blue" },
+        marker: { color: "blue", size: 4 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
@@ -331,14 +571,14 @@ function App() {
       {
         x: montecarlo.red?.x,
         y: montecarlo.red?.y,
-        marker: { color: "red" },
+        marker: { color: "red", size: 4 },
         mode: "markers",
         type: "scatter",
         name: "Montecarlo",
         legendgroup: "montecarlo",
         showlegend: false,
       },
-      { x: exact.x, y: exact.y, mode: "lines", name: "Exacta" },
+      { x: exact.x, y: exact.y, mode: "lines", name: "Exacta", marker: { color: "black" } },
     ];
   }
 

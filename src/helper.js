@@ -12,21 +12,20 @@ export const helper = {
     let result = 0;
     let x1 = min;
     let y1 = this.func(equation, min);
-    let x2, y2;
+    let y2;
     let dx = (max - min) / num;
     let yMin = Number.MAX_SAFE_INTEGER;
     let yMax = Number.MIN_SAFE_INTEGER;
-    for (let i = 0; i < num; i++) {
-      x2 = +x1 + dx;
-      y2 = this.func(equation, x2);
+    for (let i = 0; i <= num; i++) {
+      y2 = this.func(equation, x1);
       let area = ((y1 + y2) * dx) / 2;
       result += area;
-      x1 = x2;
       y1 = y2;
-      x.push(x2);
+      x.push(x1);
       y.push(y2);
       yMin = Math.min(yMin, y2);
       yMax = Math.max(yMax, y2);
+      x1 += dx;
     }
 
     result = +result.toFixed(4);
@@ -156,11 +155,11 @@ export const helper = {
       let res = helper.func(equation, randX);
       // console.log(`equation: ${equation} - randX: ${randX} - randY: ${randY} - res: ${res}`)
       // console.log(randX)
-      if (res >= 0 && randY >= 0 && randY <= res) {
+      if (res > 0 && randY > 0 && randY <= res) {
         green.x.push(randX);
         green.y.push(randY);
         green.count++;
-      } else if (res < 0 && randY <= 0 && randY >= res) {
+      } else if (res < 0 && randY < 0 && randY >= res) {
         blue.x.push(randX);
         blue.y.push(randY);
         blue.count++;
@@ -169,8 +168,8 @@ export const helper = {
         red.y.push(randY);
       }
     }
-
-    let result = (((xMax - xMin) * (H * (green.count - blue.count))) / N).toFixed(4);
+    let squareArea = (xMax - xMin) * H;
+    let result = (squareArea * ((green.count - blue.count)) / N).toFixed(4);
 
     // console.log("yMin", yMin, "yMax", yMax, "H", H, "green", green, "blue", blue);
 
@@ -272,9 +271,22 @@ export const helper = {
   replaceSqrts(str) {
     let i = str.indexOf("\\sqrt");
     while (i >= 0) {
-      let param = this.getGroup(str, i + 6, "{", "}");
-      let val = Math.sqrt(Mexp.eval(param.content));
-      str = `${str.substring(0, param.start - 6)}${val}${str.substring(param.end + 1)}`;
+      let exp = this.getGroup(str, i + str.indexOf("[") + 1, "[", "]");
+      let param = this.getGroup(str, i + str.indexOf("{") + 1, "{", "}");
+      let val = 0;
+      let isSquare = exp.end === str.length - 1;
+
+      if (isSquare)
+        val = Math.sqrt(Mexp.eval(param.content));
+      else {
+        let number = +param.content.substring(1, param.content.length - 1);
+        if (+exp.content % 2 === 0 && number < 0)
+          val = 0;
+        else
+          val = Math.pow(Math.abs(number), 1/+exp.content) * (number > 0 ? 1 : -1);
+      }
+
+      str = `${str.substring(0, param.start - str.indexOf("{") - 2)}${val}${str.substring(param.end + 1)}`;
       i = str.indexOf("\\sqrt");
     }
     return str;
