@@ -169,7 +169,7 @@ export const helper = {
       }
     }
     let squareArea = (xMax - xMin) * H;
-    let result = (squareArea * ((green.count - blue.count)) / N).toFixed(4);
+    let result = ((squareArea * (green.count - blue.count)) / N).toFixed(4);
 
     // console.log("yMin", yMin, "yMax", yMax, "H", H, "green", green, "blue", blue);
 
@@ -186,8 +186,12 @@ export const helper = {
     let y = { rectangle: [], trapezium: [], simpson: [] };
     for (let i = 1; i <= N; i++) {
       x.push(i);
-      y.rectangle.push(this.integralRectangle(min, max, equationLatex, i).result);
-      y.trapezium.push(this.integralTrapezium(min, max, equationLatex, i).result);
+      y.rectangle.push(
+        this.integralRectangle(min, max, equationLatex, i).result
+      );
+      y.trapezium.push(
+        this.integralTrapezium(min, max, equationLatex, i).result
+      );
       y.simpson.push(this.integralSimpson(min, max, equationLatex, i).result);
     }
 
@@ -262,7 +266,10 @@ export const helper = {
         default:
           break;
       }
-      str = `${str.substring(0, param.start - func.length - 1)}${res}${str.substring(param.end + 1)}`;
+      str = `${str.substring(
+        0,
+        param.start - func.length - 1
+      )}${res}${str.substring(param.end + 1)}`;
       i = str.indexOf(func);
     }
     return str;
@@ -276,17 +283,20 @@ export const helper = {
       let val = 0;
       let isSquare = exp.end === str.length - 1;
 
-      if (isSquare)
-        val = Math.sqrt(Mexp.eval(param.content));
+      if (isSquare) val = Math.sqrt(Mexp.eval(param.content)) || 0;
       else {
         let number = +param.content.substring(1, param.content.length - 1);
-        if (+exp.content % 2 === 0 && number < 0)
-          val = 0;
+        if (+exp.content % 2 === 0 && number < 0) val = 0;
         else
-          val = Math.pow(Math.abs(number), 1/+exp.content) * (number > 0 ? 1 : -1);
+          val =
+            Math.pow(Math.abs(number), 1 / +exp.content) *
+            (number > 0 ? 1 : -1);
       }
 
-      str = `${str.substring(0, param.start - str.indexOf("{") - 2)}${val}${str.substring(param.end + 1)}`;
+      str = `${str.substring(
+        0,
+        param.start - str.indexOf("{") - 2
+      )}${val}${str.substring(param.end + 1)}`;
       i = str.indexOf("\\sqrt");
     }
     return str;
@@ -319,7 +329,9 @@ export const helper = {
     while (i >= 0) {
       let left = this.getGroup(str, i + 6, "{", "}");
       let right = this.getGroup(str, left.end + 2, "{", "}");
-      str = `${str.substring(0, left.start - 6)}(${left.content})/(${right.content})${str.substring(right.end + 1)}`;
+      str = `${str.substring(0, left.start - 6)}(${left.content})/(${
+        right.content
+      })${str.substring(right.end + 1)}`;
       i = str.indexOf("\\frac{");
     }
     return str;
